@@ -7,104 +7,140 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
   :root{
-    --cream:#f7f4ee; --ink:#2b2b28; --ink-soft:#5a5a54;
-    --brass:#a8763f; --brass-bright:#c08e52;
-    --good:#3f7a4f; --warn:#a6392a; --line:#ddd6c6; --card:#fdfbf6;
+    --bg:#0d1117; --bg-raised:#161b22; --card:#161b22; --line:#2a3038;
+    --text:#e6e9ee; --text-dim:#8b94a3;
+    --brass:#d4a253; --brass-bright:#e8b96a;
+    --good:#4fbf6a; --warn:#e0654f;
+    --azure:#5b9fd4; --plum:#b088c9; --sage:#7ec98f; --rose:#e08fa3; --amber:#e0b45b;
   }
   *{box-sizing:border-box;}
-  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,'Inter',sans-serif;}
   a{color:var(--brass);text-decoration:none;}
   .serif{font-family:'Newsreader',serif;}
   .mono{font-family:'IBM Plex Mono',monospace;}
   .view{display:none;} .view.active{display:block;}
 
-  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--line);}
-  .brand{font-family:'Newsreader',serif;font-style:italic;font-size:22px;font-weight:600;cursor:pointer;}
-  .navlinks{display:flex;align-items:center;gap:28px;font-size:14px;color:var(--ink-soft);}
-  .btn-dark{font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:var(--cream);cursor:pointer;}
-  .btn-outline{font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;border:1px solid var(--ink-soft);background:transparent;color:var(--ink);cursor:pointer;}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--line);flex-wrap:wrap;gap:10px;}
+  .brand{font-family:'Newsreader',serif;font-style:italic;font-size:22px;font-weight:600;cursor:pointer;color:var(--text);}
+  .navlinks{display:flex;align-items:center;gap:20px;font-size:14px;color:var(--text-dim);flex-wrap:wrap;}
+  .navlinks span{cursor:pointer;}
+  .btn-dark{font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;border:1px solid var(--brass);background:var(--brass);color:#1a1408;cursor:pointer;}
+  .btn-outline{font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;border:1px solid var(--line);background:transparent;color:var(--text);cursor:pointer;}
+  .lang-btn{font-size:12px;font-weight:600;padding:6px 12px;border-radius:4px;border:1px solid var(--line);background:transparent;color:var(--text-dim);cursor:pointer;}
 
-  .hero{max-width:720px;margin:0 auto;padding:80px 30px 40px;text-align:center;}
-  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brass);margin-bottom:18px;}
-  .hero h1{font-family:'Newsreader',serif;font-weight:500;font-size:44px;line-height:1.15;margin:0 0 20px;}
-  .hero p{font-size:16px;line-height:1.6;color:var(--ink-soft);margin:0 0 26px;}
-  .hero-btns{display:flex;gap:12px;justify-content:center;margin-bottom:26px;}
-  .trust-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid #ddd0b0;border-radius:20px;background:#f2ead9;font-size:13px;}
+  .hero{max-width:760px;margin:0 auto;padding:60px 24px 30px;text-align:center;}
+  .bear-mascot{width:56px;height:56px;margin:0 auto 16px;display:block;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brass);margin-bottom:16px;}
+  .hero h1{font-family:'Newsreader',serif;font-weight:500;font-size:38px;line-height:1.2;margin:0 0 18px;}
+  .hero p{font-size:15px;line-height:1.6;color:var(--text-dim);margin:0 0 24px;}
+  .hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:22px;}
+  .trust-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid var(--line);border-radius:20px;background:var(--bg-raised);font-size:12.5px;color:var(--text-dim);}
   .dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex-shrink:0;}
 
-  .ticker-bar{background:var(--ink);padding:14px 0;overflow:hidden;white-space:nowrap;}
+  .ticker-bar{background:#080b0f;padding:12px 0;overflow:hidden;white-space:nowrap;margin-top:32px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
   .ticker-track{display:inline-block;animation:scroll 35s linear infinite;font-family:'IBM Plex Mono',monospace;font-size:12px;}
-  .ticker-track span{margin-right:30px;color:#e8e2d0;}
-  .ticker-track .up{color:#8fbf9a;} .ticker-track .down{color:#d99a8a;}
+  .ticker-track span{margin-right:28px;color:var(--text-dim);}
+  .ticker-track .up{color:var(--good);font-weight:600;} .ticker-track .down{color:var(--warn);font-weight:600;}
   @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
-  .section{max-width:1000px;margin:0 auto;padding:60px 30px;}
-  .section h2{font-family:'Newsreader',serif;font-weight:500;font-size:28px;text-align:center;margin:0 0 10px;}
-  .section .lead{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 0 40px;max-width:500px;margin-left:auto;margin-right:auto;}
-  .feature-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:20px;}
-  .feature-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:26px;}
-  .feature-card h3{font-family:'Newsreader',serif;font-size:18px;margin:0 0 8px;}
-  .feature-card p{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin:0;}
+  .steps{max-width:900px;margin:0 auto;padding:50px 24px 20px;}
+  .steps h2{font-family:'Newsreader',serif;font-size:24px;text-align:center;margin:0 0 30px;}
+  .step-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .step-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px;}
+  .step-card .num{font-family:'IBM Plex Mono',monospace;color:var(--brass);font-size:12px;margin-bottom:8px;}
+  .step-card p{font-size:13.5px;line-height:1.6;color:var(--text-dim);margin:0;}
 
-  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-  .price-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px 20px;}
-  .price-card.featured{border-color:var(--brass);background:#f5ecd8;}
-  .price-card .tier{font-family:'Newsreader',serif;font-size:18px;margin-bottom:4px;}
-  .price-card .blurb{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
-  .price-card .amount{font-family:'Newsreader',serif;font-size:26px;margin-bottom:16px;}
-  .price-card .amount span{font-size:12px;color:var(--ink-soft);font-family:'Inter',sans-serif;}
-  .price-card ul{margin:0 0 16px;padding:0;list-style:none;font-size:12.5px;color:var(--ink-soft);line-height:2;}
-  .price-card button{width:100%;padding:10px;border-radius:4px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-weight:600;font-size:13px;cursor:pointer;}
-  .price-card.featured button{background:var(--ink);color:var(--cream);}
+  .section{max-width:1000px;margin:0 auto;padding:44px 24px;}
+  .section h2{font-family:'Newsreader',serif;font-weight:500;font-size:26px;text-align:center;margin:0 0 8px;}
+  .section .lead{text-align:center;font-size:13.5px;color:var(--text-dim);margin:0 0 30px;}
+  .feature-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:18px;}
+  .feature-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:24px;}
+  .feature-card h3{font-family:'Newsreader',serif;font-size:17px;margin:0 0 8px;}
+  .feature-card p{font-size:13px;line-height:1.6;color:var(--text-dim);margin:0;}
 
-  /* Dashboard */
-  .hero-number{max-width:1000px;margin:0 auto;padding:40px 30px 0;}
-  .greeting{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
-  .big-num{font-family:'Newsreader',serif;font-size:48px;font-weight:600;}
-  .sub-stats{display:flex;gap:24px;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;}
-  .sub-stats .lbl{color:var(--ink-soft);font-family:'Inter',sans-serif;font-size:11px;margin-right:6px;}
+  .news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+  .news-card{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--card);}
+  .news-card .thumb{height:70px;background:linear-gradient(135deg,#1f2733,#161b22);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:11px;}
+  .news-card .body{padding:14px;}
+  .news-card .source{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--brass);text-transform:uppercase;margin-bottom:6px;}
+  .news-card h4{font-family:'Newsreader',serif;font-size:14px;margin:0 0 8px;line-height:1.3;color:var(--text);}
+  .news-card p{font-size:12px;color:var(--text-dim);margin:0 0 10px;line-height:1.5;}
+
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .price-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:20px;}
+  .price-card.featured{border-color:var(--brass);}
+  .price-card .tier{font-family:'Newsreader',serif;font-size:17px;margin-bottom:4px;}
+  .price-card .amount{font-family:'Newsreader',serif;font-size:24px;margin:10px 0;}
+  .price-card ul{margin:0 0 14px;padding:0;list-style:none;font-size:12px;color:var(--text-dim);line-height:2;}
+  .price-card button{width:100%;padding:9px;border-radius:4px;border:1px solid var(--line);background:transparent;color:var(--text);font-weight:600;font-size:12.5px;cursor:pointer;}
+  .price-card.featured button{background:var(--brass);color:#1a1408;border-color:var(--brass);}
+
+  .hero-number{max-width:1000px;margin:0 auto;padding:32px 24px 0;}
+  .greeting{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--text-dim);margin-bottom:8px;}
+  .big-num{font-family:'Newsreader',serif;font-size:44px;font-weight:600;}
+  .sub-stats{display:flex;gap:22px;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;flex-wrap:wrap;}
+  .sub-stats .lbl{color:var(--text-dim);font-family:-apple-system,sans-serif;font-size:11px;margin-right:6px;}
   .up{color:var(--good);} .down{color:var(--warn);}
 
-  .dash-tabs{max-width:1000px;margin:20px auto 0;padding:0 30px;display:flex;gap:8px;border-bottom:1px solid var(--line);}
-  .dash-tab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;}
-  .dash-tab.active{color:var(--ink);border-color:var(--brass);}
+  .dash-tabs{max-width:1000px;margin:20px auto 0;padding:0 24px;display:flex;gap:6px;border-bottom:1px solid var(--line);overflow-x:auto;}
+  .dash-tab{padding:10px 14px;font-size:13px;font-weight:600;color:var(--text-dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+  .dash-tab.active{color:var(--text);border-color:var(--brass);}
 
-  .dash-panel{max-width:1000px;margin:0 auto;padding:24px 30px 60px;display:none;}
+  .dash-panel{max-width:1000px;margin:0 auto;padding:22px 24px 60px;display:none;}
   .dash-panel.active{display:block;}
-  .card-box{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px;margin-bottom:16px;}
-  #chart{width:100%;height:140px;display:block;}
-  .concentration-bar-bg{background:#e8e2d0;height:8px;border-radius:4px;overflow:hidden;margin:10px 0;}
+  .card-box{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:20px;margin-bottom:16px;}
+  #chart{width:100%;height:130px;display:block;}
+  .concentration-bar-bg{background:#232a35;height:8px;border-radius:4px;overflow:hidden;margin:10px 0;}
   .concentration-bar{height:100%;background:var(--warn);}
 
-  #overlapSvg{width:100%;height:220px;display:block;}
-  .cluster-note{font-size:13px;line-height:1.6;margin-bottom:8px;}
+  #overlapSvg{width:100%;height:200px;display:block;}
+  .cluster-block{border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-bottom:10px;background:#12161d;}
+  .cluster-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;}
+  .conf-badge{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid;}
+  .conf-High{color:var(--good);border-color:var(--good);}
+  .conf-Medium{color:var(--amber);border-color:var(--amber);}
+  .conf-Low{color:var(--text-dim);border-color:var(--line);}
+  .cluster-mech{font-size:13px;color:var(--text);margin:4px 0;}
+  .cluster-reason{font-size:12.5px;color:var(--text-dim);margin:4px 0;}
+  .cluster-news{margin-top:8px;font-size:11.5px;}
+  .cluster-news a{display:block;margin-top:4px;color:var(--azure);}
 
-  .holding-row{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:12px 0;}
+  .holding-row{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:12px 0;flex-wrap:wrap;}
   .holding-row:last-child{border-bottom:none;}
-  .h-ticker{font-family:'IBM Plex Mono',monospace;font-weight:700;width:60px;}
-  .h-shares{font-size:11px;color:var(--ink-soft);width:70px;}
-  .h-news{flex:1;font-size:13px;}
-  .h-nums{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .h-ticker{font-family:'IBM Plex Mono',monospace;font-weight:700;width:56px;}
+  .h-shares{font-size:11px;color:var(--text-dim);width:60px;}
+  .h-news{flex:1;font-size:12.5px;min-width:120px;}
+  .h-nums{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;margin-left:auto;}
 
-  .txn-form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
-  .txn-form input,.txn-form select{padding:9px 10px;border:1px solid var(--line);border-radius:4px;font-size:13px;font-family:inherit;}
-  .txn-form button{background:var(--ink);color:var(--cream);border:none;padding:9px 18px;border-radius:4px;font-weight:600;cursor:pointer;}
+  .txn-form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .txn-form input,.txn-form select{padding:9px 10px;border:1px solid var(--line);border-radius:4px;font-size:13px;font-family:inherit;background:#0d1117;color:var(--text);}
+  .txn-form button{background:var(--brass);color:#1a1408;border:none;padding:9px 18px;border-radius:4px;font-weight:600;cursor:pointer;}
   table{width:100%;border-collapse:collapse;font-size:13px;}
-  th{text-align:left;font-size:10.5px;text-transform:uppercase;color:var(--ink-soft);padding:8px 6px;border-bottom:1px solid var(--line);}
+  th{text-align:left;font-size:10.5px;text-transform:uppercase;color:var(--text-dim);padding:8px 6px;border-bottom:1px solid var(--line);}
   td{padding:9px 6px;border-bottom:1px solid var(--line);font-family:'IBM Plex Mono',monospace;}
 
-  .chat-msg{max-width:75%;padding:12px 16px;border-radius:8px;margin-bottom:10px;font-size:13.5px;line-height:1.5;}
-  .chat-msg.assistant{background:var(--card);border:1px solid var(--line);}
-  .chat-msg.user{background:var(--ink);color:var(--cream);margin-left:auto;}
+  .chat-msg{max-width:80%;padding:12px 16px;border-radius:8px;margin-bottom:10px;font-size:13.5px;line-height:1.6;}
+  .chat-msg.assistant{background:#12161d;border:1px solid var(--line);}
+  .chat-msg.user{background:var(--brass);color:#1a1408;margin-left:auto;}
   .chat-input-row{display:flex;gap:8px;margin-top:14px;}
-  .chat-input-row input{flex:1;padding:11px 14px;border:1px solid var(--line);border-radius:6px;font-size:13.5px;}
-  .chat-input-row button{background:var(--ink);color:var(--cream);border:none;padding:11px 18px;border-radius:6px;font-weight:600;cursor:pointer;}
+  .chat-input-row input{flex:1;padding:11px 14px;border:1px solid var(--line);border-radius:6px;font-size:13.5px;background:#0d1117;color:var(--text);}
+  .chat-input-row button{background:var(--brass);color:#1a1408;border:none;padding:11px 18px;border-radius:6px;font-weight:600;cursor:pointer;}
 
-  .status-line{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .status-line{font-size:12px;color:var(--text-dim);margin-bottom:10px;}
   .status-line.err{color:var(--warn);}
-  .disclaimer{text-align:center;font-size:11px;color:var(--ink-soft);padding:20px 0 40px;}
+  .disclaimer{text-align:center;font-size:11px;color:var(--text-dim);padding:20px 0 40px;}
+  .empty-state{border:1px dashed var(--line);border-radius:6px;padding:28px 20px;text-align:center;color:var(--text-dim);font-size:13.5px;}
+  .empty-state .bear-mascot{width:40px;height:40px;margin-bottom:10px;opacity:0.7;}
+  .estimate-note{font-size:10.5px;color:var(--text-dim);font-style:italic;margin-top:6px;}
 
-  @media(max-width:800px){ .feature-grid{grid-template-columns:1fr;} .pricing-grid{grid-template-columns:1fr 1fr;} }
+  @media(max-width:820px){
+    .feature-grid, .pricing-grid, .step-grid, .news-grid{grid-template-columns:1fr;}
+    .hero h1{font-size:30px;}
+    nav{padding:14px 16px;}
+    .navlinks{gap:12px;font-size:12.5px;}
+    .hero-number, .dash-tabs, .dash-panel{padding-left:16px;padding-right:16px;}
+    .h-nums{width:100%;text-align:left;margin-left:0;}
+  }
 </style>
 </head>
 <body>
@@ -112,64 +148,65 @@
 <!-- MARKETING VIEW -->
 <div id="marketingView" class="view active">
   <nav>
-    <div class="brand" onclick="showDashboard()">Stocky</div>
+    <div class="brand" onclick="showMarketing()">Stocky</div>
     <div class="navlinks">
-      <a href="#features">Product</a>
-      <a href="#trust">How it works</a>
-      <a href="#pricing">Pricing</a>
-      <button class="btn-dark" onclick="showDashboard()">Open Dashboard</button>
+      <span onclick="showSection('trust')" data-t="howItWorks">How it works</span>
+      <span onclick="showSection('pricing')" data-t="pricing">Pricing</span>
+      <button class="lang-btn" onclick="toggleLang()" id="langBtn">EN / 繁中</button>
+      <button class="btn-dark" onclick="showDashboard()" data-t="openDashboard">Open Dashboard</button>
     </div>
   </nav>
 
   <div class="hero">
-    <div class="eyebrow">Portfolio risk, made visible</div>
-    <h1>The overlap hiding inside your "diversified" portfolio.</h1>
-    <p>Stocky is the only tracker that finds shared risk between stocks that look unrelated — two AI-chip names, one supply chain, one bad week — and shows you before you have to ask.</p>
+    <svg class="bear-mascot" viewBox="0 0 100 100" fill="none" stroke="#e6e9ee" stroke-width="2.2">
+      <circle cx="50" cy="55" r="28"/><circle cx="30" cy="28" r="11"/><circle cx="70" cy="28" r="11"/>
+      <circle cx="30" cy="28" r="4" fill="#e6e9ee"/><circle cx="70" cy="28" r="4" fill="#e6e9ee"/>
+      <circle cx="41" cy="50" r="2.5" fill="#e6e9ee"/><circle cx="59" cy="50" r="2.5" fill="#e6e9ee"/>
+      <path d="M44 62 Q50 67 56 62" stroke-linecap="round"/>
+    </svg>
+    <div class="eyebrow" data-t="eyebrow">Portfolio risk, made visible</div>
+    <h1 data-t="headline">The overlap hiding inside your "diversified" portfolio.</h1>
+    <p data-t="subhead">Stocky is the only tracker that finds shared risk between stocks that look unrelated — and shows you before you have to ask.</p>
     <div class="hero-btns">
-      <button class="btn-dark" onclick="showDashboard()">See your overlap</button>
-      <a href="#trust" class="btn-outline" style="display:inline-block;">How it works</a>
+      <button class="btn-dark" onclick="showDashboard()" data-t="seeOverlap">See your overlap</button>
+      <button class="btn-outline" onclick="showSection('trust')" data-t="howItWorks">How it works</button>
     </div>
-    <div class="trust-pill"><span class="dot"></span> No bank or brokerage linking — ever. You tell us what you own.</div>
+    <div class="trust-pill"><span class="dot"></span><span data-t="trustPill">No bank or brokerage linking — ever. You tell us what you own.</span></div>
   </div>
 
-  <div class="ticker-bar"><div class="ticker-track" id="marketingTicker"><span>Loading market ticker...</span></div></div>
+  <div class="ticker-bar"><div class="ticker-track" id="marketingTicker"><span>Loading...</span></div></div>
 
-  <div class="section" id="features">
-    <h2>One memory, three ways to use it.</h2>
-    <p class="lead">Stocky remembers exactly what you own — so it can do things a person starting from scratch with a chatbot can't.</p>
+  <div class="steps">
+    <h2 data-t="howWorksTitle">How it works</h2>
+    <div class="step-grid">
+      <div class="step-card"><div class="num">01</div><p data-t="step1">Tell us what you own — just tickers and shares, no account linking.</p></div>
+      <div class="step-card"><div class="num">02</div><p data-t="step2">We check your holdings against each other — flagging real shared risk you wouldn't spot from the names alone.</p></div>
+      <div class="step-card"><div class="num">03</div><p data-t="step3">See it before it matters — a plain-English reason, not just a chart.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2 data-t="newsTitle">Live market pulse</h2>
+    <p class="lead" data-t="newsLead">Real, current stories — searched live, never invented.</p>
+    <div class="news-grid" id="marketingNews"><div class="feature-card">Loading...</div></div>
+  </div>
+
+  <div class="section" id="trustSection">
+    <h2 data-t="dataTitle">How your data works</h2>
     <div class="feature-grid">
-      <div class="feature-card">
-        <h3>Hidden overlap, found automatically</h3>
-        <p>Two holdings can look unrelated and still share a supply chain, a sector, or a macro exposure. Stocky maps the connection and explains it in plain terms — before you ask.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Recovery, in context</h3>
-        <p>Not just "down 12%" — how long similar pullbacks have typically taken to recover, so a dip reads as a moment in time, not just a number.</p>
-      </div>
-      <div class="feature-card">
-        <h3>Ask Stocky anything</h3>
-        <p>A real question, answered with your actual holdings already in mind. No re-explaining your portfolio every time. Never a buy, sell, or hold call.</p>
-      </div>
+      <div class="feature-card"><h3 data-t="d1t">01 — You type it in.</h3><p data-t="d1p">No bank credentials, no account linking. Every share count comes from you.</p></div>
+      <div class="feature-card"><h3 data-t="d2t">02 — Yours to take.</h3><p data-t="d2p">Export everything anytime, or clear it in one click.</p></div>
+      <div class="feature-card"><h3 data-t="d3t">03 — We describe, never advise.</h3><p data-t="d3p">No buy/sell/hold calls, ever. Uncertain data is flagged, not hidden.</p></div>
     </div>
   </div>
 
-  <div class="section" id="trust">
-    <h2>How your data works</h2>
-    <p class="lead">Plainly, since new finance apps have to earn this.</p>
-    <div class="feature-grid">
-      <div class="feature-card"><h3>01 — You type it in.</h3><p>No bank credentials, no account linking. Every share count comes from you.</p></div>
-      <div class="feature-card"><h3>02 — Yours to take.</h3><p>Export everything anytime, or clear it in one click.</p></div>
-      <div class="feature-card"><h3>03 — We describe, never advise.</h3><p>No buy/sell/hold calls, ever. Uncertain data is flagged, not hidden.</p></div>
-    </div>
-  </div>
-
-  <div class="section" id="pricing">
-    <h2>Pricing</h2>
+  <div class="section" id="pricingSection">
+    <h2 data-t="pricingTitle">Pricing</h2>
     <div class="pricing-grid">
-      <div class="price-card"><div class="tier">Free</div><div class="blurb">For a first look</div><div class="amount">$0<span>/mo</span></div><ul><li>Up to 5 holdings</li><li>Basic concentration score</li><li>Manual entry only</li></ul><button>Choose Free</button></div>
-      <div class="price-card"><div class="tier">Starter</div><div class="blurb">For one real portfolio</div><div class="amount">$9<span>/mo</span></div><ul><li>Unlimited holdings</li><li>Full overlap diagram</li><li>Transaction log & export</li></ul><button>Choose Starter</button></div>
-      <div class="price-card featured"><div class="tier">Pro</div><div class="blurb">For active tracking</div><div class="amount">$19<span>/mo</span></div><ul><li>Everything in Starter</li><li>Ask Stocky, unlimited</li><li>Multiple portfolios</li></ul><button>Choose Pro</button></div>
-      <div class="price-card"><div class="tier">Advisor</div><div class="blurb">For managing others' money</div><div class="amount">$49<span>/mo per client</span></div><ul><li>Everything in Pro</li><li>Multi-client dashboard</li><li>White-label export</li></ul><button>Choose Advisor</button></div>
+      <div class="price-card"><div class="tier" data-t="tierFree">Free</div><div class="amount">$0<span style="font-size:11px;">/mo</span></div><ul><li data-t="f1">Up to 5 holdings</li><li data-t="f2">Basic concentration score</li></ul><button data-t="choose">Choose</button></div>
+      <div class="price-card"><div class="tier" data-t="tierStarter">Starter</div><div class="amount">$9<span style="font-size:11px;">/mo</span></div><ul><li data-t="f3">Unlimited holdings</li><li data-t="f4">Full overlap diagram</li></ul><button data-t="choose">Choose</button></div>
+      <div class="price-card featured"><div class="tier" data-t="tierPro">Pro</div><div class="amount">$19<span style="font-size:11px;">/mo</span></div><ul><li data-t="f5">Everything in Starter</li><li data-t="f6">Ask Stocky, unlimited</li></ul><button data-t="choose">Choose</button></div>
+      <div class="price-card"><div class="tier" data-t="tierAdvisor">Advisor</div><div class="amount">$49<span style="font-size:11px;">/mo</span></div><ul><li data-t="f7">Multi-client dashboard</li><li data-t="f8">White-label export</li></ul><button data-t="choose">Choose</button></div>
     </div>
   </div>
 </div>
@@ -179,54 +216,60 @@
   <nav>
     <div class="brand" onclick="showMarketing()">Stocky</div>
     <div class="navlinks">
-      <button class="btn-outline" onclick="showMarketing()">Home</button>
+      <button class="lang-btn" onclick="toggleLang()" id="langBtn2">EN / 繁中</button>
+      <button class="btn-outline" onclick="showMarketing()" data-t="home">Home</button>
     </div>
   </nav>
 
   <div class="hero-number">
-    <div class="greeting">Total portfolio value</div>
+    <div class="greeting" data-t="totalValue">Total portfolio value</div>
     <div class="big-num" id="totalValue">$0</div>
     <div class="sub-stats">
-      <div><span class="lbl">TODAY</span><span id="totalChange">—</span></div>
-      <div><span class="lbl">CONCENTRATION</span><span id="concentrationLabel">—</span></div>
+      <div><span class="lbl" data-t="today">TODAY</span><span id="totalChange">—</span></div>
+      <div><span class="lbl" data-t="concentration">CONCENTRATION</span><span id="concentrationLabel">—</span></div>
     </div>
   </div>
 
   <div class="dash-tabs">
-    <div class="dash-tab active" data-tab="portfolio" onclick="switchTab('portfolio')">Portfolio</div>
-    <div class="dash-tab" data-tab="transactions" onclick="switchTab('transactions')">Transactions</div>
-    <div class="dash-tab" data-tab="digest" onclick="switchTab('digest')">Digest</div>
-    <div class="dash-tab" data-tab="ask" onclick="switchTab('ask')">Ask Stocky</div>
+    <div class="dash-tab active" data-tab="portfolio" onclick="switchTab('portfolio')" data-t="tabPortfolio">Portfolio</div>
+    <div class="dash-tab" data-tab="transactions" onclick="switchTab('transactions')" data-t="tabTransactions">Transactions</div>
+    <div class="dash-tab" data-tab="digest" onclick="switchTab('digest')" data-t="tabDigest">Digest</div>
+    <div class="dash-tab" data-tab="ask" onclick="switchTab('ask')" data-t="tabAsk">Ask Stocky</div>
   </div>
 
-  <!-- Portfolio panel -->
   <div class="dash-panel active" id="panel-portfolio">
-    <div class="status-line" id="marketStatus">Add holdings, then click Refresh to pull live data.</div>
-    <button class="btn-dark" onclick="refreshMarket()" id="refreshBtn" style="margin-bottom:20px;">Refresh live data</button>
+    <div class="status-line" id="marketStatus" data-t="addHint">Add holdings, then click Refresh to pull live data.</div>
+    <button class="btn-dark" onclick="refreshMarket()" id="refreshBtn" style="margin-bottom:18px;" data-t="refresh">Refresh live data</button>
 
     <div class="card-box">
-      <svg id="chart" viewBox="0 0 800 140"></svg>
+      <svg id="chart" viewBox="0 0 800 130"></svg>
+      <div id="benchmarkNote" class="status-line"></div>
     </div>
 
     <div class="card-box">
-      <strong>Concentration</strong>
+      <strong data-t="concLabel">Concentration</strong>
       <div class="concentration-bar-bg"><div class="concentration-bar" id="concentrationBar" style="width:0%;"></div></div>
-      <div style="font-size:13px;color:var(--ink-soft);" id="concentrationText">Add holdings to see concentration.</div>
+      <div style="font-size:13px;color:var(--text-dim);" id="concentrationText" data-t="addToSee">Add holdings to see concentration.</div>
     </div>
 
     <div class="card-box">
-      <strong>Hidden overlap</strong>
-      <svg id="overlapSvg" viewBox="0 0 600 220"></svg>
+      <strong data-t="overlapLabel">Hidden overlap</strong>
+      <svg id="overlapSvg" viewBox="0 0 600 200"></svg>
       <div id="clusterNotes"></div>
     </div>
 
     <div class="card-box" id="holdingsBox">
-      <strong>Holdings</strong>
+      <strong data-t="holdingsLabel">Holdings</strong>
       <div id="holdingsList" style="margin-top:10px;"></div>
+      <div class="empty-state" id="emptyStateHoldings" style="display:none;">
+        <svg class="bear-mascot" viewBox="0 0 100 100" fill="none" stroke="#8b94a3" stroke-width="2.5">
+          <circle cx="50" cy="55" r="26"/><circle cx="32" cy="30" r="9"/><circle cx="68" cy="30" r="9"/>
+        </svg>
+        <div data-t="emptyMsg">Add a few holdings above to see your first overlap check.</div>
+      </div>
     </div>
   </div>
 
-  <!-- Transactions panel -->
   <div class="dash-panel" id="panel-transactions">
     <div class="card-box">
       <div class="txn-form">
@@ -235,51 +278,138 @@
         <input type="date" id="txnDate">
         <input type="number" id="txnShares" placeholder="Shares">
         <input type="number" step="0.01" id="txnPrice" placeholder="Price">
-        <button onclick="addTransaction()">Log</button>
+        <button onclick="addTransaction()" data-t="log">Log</button>
       </div>
       <div id="txnError" style="color:var(--warn);font-size:12px;"></div>
     </div>
     <div class="card-box">
       <table>
-        <thead><tr><th>Date</th><th>Type</th><th>Ticker</th><th>Shares</th><th>Price</th><th></th></tr></thead>
+        <thead><tr><th data-t="date">Date</th><th data-t="type">Type</th><th data-t="ticker">Ticker</th><th data-t="shares">Shares</th><th data-t="price">Price</th><th></th></tr></thead>
         <tbody id="txnTable"></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Digest panel -->
   <div class="dash-panel" id="panel-digest">
     <div class="card-box">
-      <div class="mono" style="font-size:11px;color:var(--brass);margin-bottom:10px;">THIS WEEK</div>
-      <p id="digestText" style="font-size:15px;line-height:1.7;">Add holdings and refresh live data to generate your digest.</p>
+      <div class="mono" style="font-size:11px;color:var(--brass);margin-bottom:10px;" data-t="thisWeek">THIS WEEK</div>
+      <p id="digestText" style="font-size:15px;line-height:1.7;" data-t="digestEmpty">Add holdings and refresh live data to generate your digest.</p>
     </div>
   </div>
 
-  <!-- Ask panel -->
   <div class="dash-panel" id="panel-ask">
     <div class="card-box">
       <div id="chatMessages">
-        <div class="chat-msg assistant">I can answer questions about your current holdings — like why your portfolio moved, or which positions share risk. I describe what's happening; I don't tell you what to do.</div>
+        <div class="chat-msg assistant" data-t="chatIntro">I can answer questions about your current holdings — like why your portfolio moved, or which positions share risk. I describe what's happening; I don't tell you what to do.</div>
       </div>
       <div class="chat-input-row">
-        <input type="text" id="chatInput" placeholder="Ask about your portfolio..." onkeydown="if(event.key==='Enter')sendChat()">
-        <button onclick="sendChat()">Send</button>
+        <input type="text" id="chatInput" data-t-ph="chatPlaceholder" placeholder="Ask about your portfolio..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button onclick="sendChat()" data-t="send">Send</button>
       </div>
     </div>
   </div>
 
-  <div class="disclaimer">Informational only — not investment advice.</div>
+  <div class="disclaimer" data-t="disclaimer">Informational only — not investment advice.</div>
 </div>
 
 <script>
+const T = {
+  en: {
+    howItWorks:'How it works', pricing:'Pricing', openDashboard:'Open Dashboard',
+    eyebrow:'Portfolio risk, made visible',
+    headline:'The overlap hiding inside your "diversified" portfolio.',
+    subhead:'Stocky is the only tracker that finds shared risk between stocks that look unrelated — and shows you before you have to ask.',
+    seeOverlap:'See your overlap', trustPill:'No bank or brokerage linking — ever. You tell us what you own.',
+    howWorksTitle:'How it works',
+    step1:'Tell us what you own — just tickers and shares, no account linking.',
+    step2:"We check your holdings against each other — flagging real shared risk you wouldn't spot from the names alone.",
+    step3:'See it before it matters — a plain-English reason, not just a chart.',
+    newsTitle:'Live market pulse', newsLead:'Real, current stories — searched live, never invented.',
+    dataTitle:'How your data works',
+    d1t:'01 — You type it in.', d1p:'No bank credentials, no account linking. Every share count comes from you.',
+    d2t:'02 — Yours to take.', d2p:'Export everything anytime, or clear it in one click.',
+    d3t:'03 — We describe, never advise.', d3p:'No buy/sell/hold calls, ever. Uncertain data is flagged, not hidden.',
+    pricingTitle:'Pricing', tierFree:'Free', tierStarter:'Starter', tierPro:'Pro', tierAdvisor:'Advisor',
+    f1:'Up to 5 holdings', f2:'Basic concentration score', f3:'Unlimited holdings', f4:'Full overlap diagram',
+    f5:'Everything in Starter', f6:'Ask Stocky, unlimited', f7:'Multi-client dashboard', f8:'White-label export',
+    choose:'Choose', home:'Home',
+    totalValue:'Total portfolio value', today:'TODAY', concentration:'CONCENTRATION',
+    tabPortfolio:'Portfolio', tabTransactions:'Transactions', tabDigest:'Digest', tabAsk:'Ask Stocky',
+    addHint:'Add holdings, then click Refresh to pull live data.', refresh:'Refresh live data',
+    concLabel:'Concentration', addToSee:'Add holdings to see concentration.',
+    overlapLabel:'Hidden overlap', holdingsLabel:'Holdings',
+    emptyMsg:'Add a few holdings above to see your first overlap check.',
+    log:'Log', date:'Date', type:'Type', ticker:'Ticker', shares:'Shares', price:'Price',
+    thisWeek:'THIS WEEK', digestEmpty:'Add holdings and refresh live data to generate your digest.',
+    chatIntro:"I can answer questions about your current holdings — like why your portfolio moved, or which positions share risk. I describe what's happening; I don't tell you what to do.",
+    chatPlaceholder:'Ask about your portfolio...', send:'Send',
+    disclaimer:'Informational only — not investment advice.',
+    noOverlap:'No meaningful overlap detected — holdings look genuinely diversified.',
+    verifyManually:'estimate — verify manually', liveAsOf:'Live data as of'
+  },
+  'zh-TW': {
+    howItWorks:'運作方式', pricing:'價格方案', openDashboard:'開啟儀表板',
+    eyebrow:'讓投資組合風險現形',
+    headline:'隱藏在您「分散」投資組合中的關聯風險。',
+    subhead:'Stocky 是唯一能找出看似無關的股票之間共同風險的追蹤工具——在您開口詢問之前就先告訴您。',
+    seeOverlap:'查看您的關聯風險', trustPill:'絕不連結銀行或券商帳戶——由您告訴我們持有什麼。',
+    howWorksTitle:'運作方式',
+    step1:'告訴我們您持有什麼——只需股票代號與股數，無需連結任何帳戶。',
+    step2:'我們會交叉檢查您的持股——找出光看名稱看不出來的真實共同風險。',
+    step3:'在風險發生前就先看到——用簡單易懂的文字說明原因，而不只是一張圖表。',
+    newsTitle:'即時市場動態', newsLead:'真實、即時的新聞——即時搜尋取得，絕不捏造。',
+    dataTitle:'您的資料如何被使用',
+    d1t:'01 — 由您自行輸入。', d1p:'無需銀行帳密，無需連結帳戶。每一筆股數都由您提供。',
+    d2t:'02 — 資料完全屬於您。', d2p:'隨時匯出所有資料，或一鍵清除。',
+    d3t:'03 — 我們只描述，從不建議。', d3p:'絕不提供買進/賣出/持有建議。不確定的資料會明確標示，而非隱藏。',
+    pricingTitle:'價格方案', tierFree:'免費版', tierStarter:'入門版', tierPro:'專業版', tierAdvisor:'顧問版',
+    f1:'最多 5 檔持股', f2:'基本集中度評分', f3:'無限持股數量', f4:'完整關聯風險圖',
+    f5:'包含入門版所有功能', f6:'無限次使用 Ask Stocky', f7:'多客戶儀表板', f8:'白標匯出',
+    choose:'選擇方案', home:'首頁',
+    totalValue:'投資組合總值', today:'今日', concentration:'集中度',
+    tabPortfolio:'投資組合', tabTransactions:'交易紀錄', tabDigest:'週報摘要', tabAsk:'詢問 Stocky',
+    addHint:'新增持股後，點擊「更新」以取得即時資料。', refresh:'更新即時資料',
+    concLabel:'集中度', addToSee:'新增持股以查看集中度。',
+    overlapLabel:'隱藏關聯風險', holdingsLabel:'持股明細',
+    emptyMsg:'請先新增幾筆持股，即可查看您的第一次關聯風險檢測。',
+    log:'記錄', date:'日期', type:'類型', ticker:'代號', shares:'股數', price:'價格',
+    thisWeek:'本週摘要', digestEmpty:'新增持股並更新即時資料以產生您的週報摘要。',
+    chatIntro:'我可以回答關於您目前持股的問題——例如投資組合為何波動，或哪些持股share共同風險。我只描述現況，不提供建議。',
+    chatPlaceholder:'詢問關於您投資組合的問題...', send:'送出',
+    disclaimer:'僅供參考，非投資建議。',
+    noOverlap:'未偵測到明顯的關聯風險——持股看起來確實足夠分散。',
+    verifyManually:'估計值——請自行核實', liveAsOf:'即時資料更新於'
+  }
+};
+
+let lang = localStorage.getItem('stocky:lang') || 'en';
+function applyLang(){
+  document.querySelectorAll('[data-t]').forEach(el => {
+    const key = el.getAttribute('data-t');
+    if (T[lang][key]) el.textContent = T[lang][key];
+  });
+  document.querySelectorAll('[data-t-ph]').forEach(el => {
+    const key = el.getAttribute('data-t-ph');
+    if (T[lang][key]) el.setAttribute('placeholder', T[lang][key]);
+  });
+  document.documentElement.lang = lang === 'zh-TW' ? 'zh-Hant' : 'en';
+}
+function toggleLang(){
+  lang = lang === 'en' ? 'zh-TW' : 'en';
+  localStorage.setItem('stocky:lang', lang);
+  applyLang();
+  renderAll();
+}
+
 const LS_KEY = 'stocky:transactions';
 let transactions = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-let marketData = { prices:{}, clusters:[], recovery:[] };
-const palette = ['#a8763f','#5b8fb0','#9770a8','#7ba887','#c07a8a','#c99a4a'];
+let marketData = { prices:{}, clusters:[], recovery:[], news:[], benchmark:null };
+const palette = ['#d4a253','#5b9fd4','#b088c9','#7ec98f','#e08fa3','#e0b45b'];
 function colorFor(ticker){ let h=0; for(let i=0;i<ticker.length;i++) h=(h*31+ticker.charCodeAt(i))%palette.length; return palette[h]; }
 
 function showDashboard(){ document.getElementById('marketingView').classList.remove('active'); document.getElementById('dashboardView').classList.add('active'); renderAll(); }
 function showMarketing(){ document.getElementById('dashboardView').classList.remove('active'); document.getElementById('marketingView').classList.add('active'); }
+function showSection(id){ showMarketing(); setTimeout(()=>{ const el = document.getElementById(id+'Section'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 50); }
 function switchTab(tab){
   document.querySelectorAll('.dash-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
   document.querySelectorAll('.dash-panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+tab));
@@ -288,9 +418,9 @@ function switchTab(tab){
 function computeHoldings(){
   const map = {};
   transactions.slice().sort((a,b)=>a.date<b.date?-1:1).forEach(t=>{
-    if(!map[t.ticker]) map[t.ticker]={shares:0,cost:0};
+    if (!map[t.ticker]) map[t.ticker]={shares:0,cost:0};
     const h = map[t.ticker];
-    if(t.type==='buy'){ h.shares+=t.shares; h.cost+=t.shares*t.price; }
+    if (t.type==='buy'){ h.shares+=t.shares; h.cost+=t.shares*t.price; }
     else { const avg = h.shares>0?h.cost/h.shares:0; h.shares-=t.shares; h.cost-=t.shares*avg; if(h.shares<0)h.shares=0; }
   });
   return Object.keys(map).filter(k=>map[k].shares>0.0001).map(ticker=>{
@@ -300,7 +430,6 @@ function computeHoldings(){
     return {ticker, shares:Math.round(h.shares*100)/100, cost:h.cost, avgCost:h.cost/h.shares, value, gain:value-h.cost, price:meta.price, changePct:meta.changePct, name:meta.name};
   });
 }
-
 function saveTxns(){ localStorage.setItem(LS_KEY, JSON.stringify(transactions)); }
 
 function addTransaction(){
@@ -310,8 +439,8 @@ function addTransaction(){
   const shares = parseFloat(document.getElementById('txnShares').value);
   const price = parseFloat(document.getElementById('txnPrice').value);
   const errEl = document.getElementById('txnError');
-  if(!ticker || !shares || shares<=0){ errEl.textContent='Enter a ticker and a positive share count.'; return; }
-  if(!price || price<=0){ errEl.textContent='Enter a positive price.'; return; }
+  if (!ticker || !shares || shares<=0){ errEl.textContent='Enter a ticker and a positive share count.'; return; }
+  if (!price || price<=0){ errEl.textContent='Enter a positive price.'; return; }
   errEl.textContent='';
   transactions.push({id:Date.now(), date, ticker, type, shares, price});
   saveTxns();
@@ -322,29 +451,32 @@ function deleteTxn(id){ transactions = transactions.filter(t=>t.id!==id); saveTx
 
 async function refreshMarket(){
   const holdings = computeHoldings();
-  if(holdings.length===0) return;
+  if (holdings.length===0) return;
   const btn = document.getElementById('refreshBtn');
   const statusEl = document.getElementById('marketStatus');
-  btn.disabled = true; btn.textContent='Fetching live data...';
-  statusEl.textContent = 'Pulling live prices, overlap, and recovery context — 15-30s.'; statusEl.className='status-line';
+  btn.disabled = true; btn.textContent = lang==='zh-TW' ? '更新中...' : 'Fetching...';
+  statusEl.textContent = lang==='zh-TW' ? '正在取得即時價格與新聞...' : 'Pulling live data — 15-30s.';
   try{
     const res = await fetch('/api/stocky', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'market', tickers: holdings.map(h=>h.ticker) })
+      body: JSON.stringify({ action:'market', tickers: holdings.map(h=>h.ticker), lang })
     });
     const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Request failed');
+    if (!res.ok) throw new Error(data.error || 'Request failed');
     marketData = data;
-    statusEl.textContent = 'Live data as of ' + new Date().toLocaleTimeString(); statusEl.className='status-line';
+    statusEl.textContent = T[lang].liveAsOf + ' ' + new Date().toLocaleTimeString(); statusEl.className='status-line';
   } catch(err){
-    statusEl.textContent = 'Live data unavailable: ' + err.message; statusEl.className='status-line err';
+    statusEl.textContent = 'Error: ' + err.message; statusEl.className='status-line err';
   } finally {
-    btn.disabled=false; btn.textContent='Refresh live data';
+    btn.disabled=false; btn.textContent = T[lang].refresh;
     renderAll();
   }
 }
 
+function parseNum(v){ return v==null ? null : v; }
+
 function renderAll(){
+  applyLang();
   const holdings = computeHoldings();
   const totalValue = holdings.reduce((a,h)=>a+h.value,0);
   const totalCost = holdings.reduce((a,h)=>a+h.cost,0);
@@ -360,60 +492,75 @@ function renderAll(){
   const concentrationPct = totalValue>0 ? overlapValue/totalValue*100 : 0;
   const concLabel = document.getElementById('concentrationLabel');
   const level = concentrationPct>=60?'High':concentrationPct>=25?'Moderate':'Low';
-  concLabel.textContent = level;
-  concLabel.className = level==='High'?'down':level==='Moderate'?'':'up';
+  concLabel.textContent = level; concLabel.className = level==='High'?'down':level==='Moderate'?'':'up';
   document.getElementById('concentrationBar').style.width = concentrationPct.toFixed(0)+'%';
-  document.getElementById('concentrationText').textContent = holdings.length? `${concentrationPct.toFixed(0)}% of your portfolio sits inside detected overlap clusters.` : 'Add holdings to see concentration.';
+  document.getElementById('concentrationText').textContent = holdings.length? `${concentrationPct.toFixed(0)}% ` + (lang==='zh-TW'?'的投資組合落在偵測到的關聯風險群組中。':'of your portfolio sits inside detected overlap clusters.') : T[lang].addToSee;
 
   // Chart
-  const chart = document.getElementById('chart');
-  chart.innerHTML='';
+  const chart = document.getElementById('chart'); chart.innerHTML='';
   const sorted = transactions.slice().sort((a,b)=>a.date<b.date?-1:1);
   let running=0; const points=[0];
   sorted.forEach(t=>{ running += (t.type==='buy'?1:-1)*t.shares*t.price; points.push(running); });
-  if(points.length>1){
+  if (points.length>1){
     const max=Math.max(...points,1), min=Math.min(...points,0), range=(max-min)||1;
-    const w=800,h=140,pad=6, stepX=(w-pad*2)/(points.length-1);
+    const w=800,h=130,pad=6, stepX=(w-pad*2)/(points.length-1);
     const coords = points.map((v,i)=>[pad+i*stepX, h-pad-((v-min)/range)*(h-pad*2)]);
     const path = coords.map((c,i)=>(i===0?'M':'L')+c[0].toFixed(1)+','+c[1].toFixed(1)).join(' ');
     const area = path+` L${coords[coords.length-1][0]},${h} L${coords[0][0]},${h} Z`;
-    chart.innerHTML = `<path d="${area}" fill="#a8763f" opacity="0.15"></path><path d="${path}" fill="none" stroke="#a8763f" stroke-width="2"></path>`;
+    chart.innerHTML = `<path d="${area}" fill="#d4a253" opacity="0.15"></path><path d="${path}" fill="none" stroke="#d4a253" stroke-width="2"></path>`;
   }
+  const bmEl = document.getElementById('benchmarkNote');
+  if (marketData.benchmark){
+    const diff = totalGainPct - marketData.benchmark.allTimePct;
+    bmEl.textContent = (lang==='zh-TW' ? '估計同期標普500表現：' : 'Est. S&P 500 over the same window: ') + (marketData.benchmark.allTimePct>=0?'+':'') + marketData.benchmark.allTimePct.toFixed(1) + '% — ' + (diff>=0 ? (lang==='zh-TW'?'領先 ':'ahead by ') : (lang==='zh-TW'?'落後 ':'behind by ')) + Math.abs(diff).toFixed(1) + ' pts';
+  } else { bmEl.textContent=''; }
 
-  // Overlap diagram
+  // Overlap clusters (detailed)
   const overlapSvg = document.getElementById('overlapSvg');
   overlapSvg.innerHTML='';
   const clusterNotes = document.getElementById('clusterNotes');
   const clusters = marketData.clusters || [];
-  if(clusters.length===0 || holdings.length===0){
-    clusterNotes.innerHTML = holdings.length===0 ? '<p style="font-size:13px;color:var(--ink-soft);">Add holdings to check for overlap.</p>' : '<p style="font-size:13px;color:var(--ink-soft);">No hidden overlap detected among your current holdings.</p>';
+  if (clusters.length===0 || holdings.length===0){
+    clusterNotes.innerHTML = holdings.length===0 ? '' : `<p style="font-size:13px;color:var(--text-dim);">${T[lang].noOverlap}</p>`;
   } else {
-    const n = holdings.length, cx=300, cy=110, r=80;
+    const n = holdings.length, cx=300, cy=95, r=75;
     const pos={};
     holdings.forEach((h,i)=>{ const a=(2*Math.PI*i/n)-Math.PI/2; pos[h.ticker]=[cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
     let svgHtml='';
     clusters.forEach(c=>{
       for(let i=0;i<c.tickers.length;i++) for(let j=i+1;j<c.tickers.length;j++){
         const a=pos[c.tickers[i]], b=pos[c.tickers[j]];
-        if(a&&b) svgHtml += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#a8763f" stroke-width="2" stroke-dasharray="4 3" opacity="0.6"></line>`;
+        if (a&&b) svgHtml += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#d4a253" stroke-width="2" stroke-dasharray="4 3" opacity="0.6"></line>`;
       }
     });
     holdings.forEach(h=>{
       const p = pos[h.ticker];
-      svgHtml += `<circle cx="${p[0]}" cy="${p[1]}" r="22" fill="#fdfbf6" stroke="${colorFor(h.ticker)}" stroke-width="2"></circle><text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="#2b2b28">${h.ticker}</text>`;
+      svgHtml += `<circle cx="${p[0]}" cy="${p[1]}" r="20" fill="#12161d" stroke="${colorFor(h.ticker)}" stroke-width="2"></circle><text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="#e6e9ee">${h.ticker}</text>`;
     });
     overlapSvg.innerHTML = svgHtml;
-    clusterNotes.innerHTML = clusters.map(c=>`<div class="cluster-note">⬤ <strong>${c.tickers.join(' + ')}</strong> — ${c.reason}</div>`).join('');
+    clusterNotes.innerHTML = clusters.map(c => `
+      <div class="cluster-block">
+        <div class="cluster-head">
+          <strong>${c.tickers.join(' + ')}</strong>
+          <span class="conf-badge conf-${c.confidence||'Medium'}">${c.confidence||'Medium'}</span>
+        </div>
+        <div class="cluster-mech">${c.mechanism || c.reason}</div>
+        <div class="cluster-reason">${c.reason||''}</div>
+        ${(c.news||[]).length ? '<div class="cluster-news">' + c.news.map(n=>`<a href="${n.url}" target="_blank" rel="noopener">${n.source}: ${n.headline}</a>`).join('') + '</div>' : ''}
+      </div>
+    `).join('');
   }
 
-  // Holdings list
+  // Holdings list + empty state
   const holdingsList = document.getElementById('holdingsList');
-  if(holdings.length===0){
-    holdingsList.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);">No holdings yet. Log a buy in the Transactions tab.</p>';
+  const emptyState = document.getElementById('emptyStateHoldings');
+  if (holdings.length===0){
+    holdingsList.innerHTML = ''; emptyState.style.display='block';
   } else {
+    emptyState.style.display='none';
     holdingsList.innerHTML = holdings.map(h=>{
       const rec = (marketData.recovery||[]).find(r=>r.ticker===h.ticker);
-      const news = rec ? `Down from its ${rec.peakLabel} — ${rec.recoveryNote}` : (h.price? 'Live price loaded.' : 'Click Refresh for live data.');
+      const news = rec ? rec.recoveryNote : (h.price? (lang==='zh-TW'?'已載入即時價格。':'Live price loaded.') : (lang==='zh-TW'?'點擊更新以取得即時資料。':'Click Refresh for live data.'));
       const gainPct = h.cost>0? (h.gain/h.cost*100):0;
       return `<div class="holding-row">
         <div class="h-ticker" style="color:${colorFor(h.ticker)};">${h.ticker}</div>
@@ -424,7 +571,7 @@ function renderAll(){
     }).join('');
   }
 
-  // Transactions table
+  // Transactions
   const txnTable = document.getElementById('txnTable');
   txnTable.innerHTML = transactions.slice().sort((a,b)=>a.date<b.date?1:-1).map(t=>`
     <tr><td>${t.date}</td><td style="color:${t.type==='buy'?'var(--good)':'var(--warn)'}">${t.type.toUpperCase()}</td><td>${t.ticker}</td><td>${t.shares}</td><td>$${t.price.toFixed(2)}</td>
@@ -433,61 +580,87 @@ function renderAll(){
 
   // Digest
   const digestEl = document.getElementById('digestText');
-  if(holdings.length>0){
+  if (holdings.length>0){
     const topGainer = holdings.slice().sort((a,b)=>(b.gain/b.cost||0)-(a.gain/a.cost||0))[0];
     const overlapCount = holdings.filter(h=>clusterTickers.has(h.ticker)).length;
-    digestEl.textContent = `${topGainer.ticker} is your standout mover, and the portfolio overall is ${totalGainPct>=0?'up':'down'} ${Math.abs(totalGainPct).toFixed(0)}% since you started tracking. ${overlapCount} of your ${holdings.length} holdings sit inside a detected overlap cluster — nothing to act on, just worth knowing.`;
+    digestEl.textContent = lang==='zh-TW'
+      ? `${topGainer.ticker} 是您本期表現最突出的持股，整體投資組合自追蹤以來${totalGainPct>=0?'上漲':'下跌'} ${Math.abs(totalGainPct).toFixed(0)}%。您 ${holdings.length} 檔持股中有 ${overlapCount} 檔落在偵測到的關聯風險群組內——無需採取行動，僅供參考。`
+      : `${topGainer.ticker} is your standout mover, and the portfolio overall is ${totalGainPct>=0?'up':'down'} ${Math.abs(totalGainPct).toFixed(0)}% since you started tracking. ${overlapCount} of your ${holdings.length} holdings sit inside a detected overlap cluster — nothing to act on, just worth knowing.`;
+  } else {
+    digestEl.textContent = T[lang].digestEmpty;
   }
+}
+
+function formatChatAnswer(text){
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\n/g, '<br>');
 }
 
 async function sendChat(){
   const input = document.getElementById('chatInput');
   const q = input.value.trim();
-  if(!q) return;
+  if (!q) return;
   const msgs = document.getElementById('chatMessages');
   msgs.innerHTML += `<div class="chat-msg user">${q}</div>`;
   input.value='';
-  msgs.innerHTML += `<div class="chat-msg assistant" id="chatLoading">Thinking...</div>`;
+  msgs.innerHTML += `<div class="chat-msg assistant" id="chatLoading">${lang==='zh-TW'?'思考中...':'Thinking...'}</div>`;
   msgs.scrollTop = msgs.scrollHeight;
   const holdings = computeHoldings();
   try{
     const res = await fetch('/api/stocky', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'ask', question:q, holdings, digest: document.getElementById('digestText').textContent })
+      body: JSON.stringify({ action:'ask', question:q, holdings, digest: document.getElementById('digestText').textContent, lang })
     });
     const data = await res.json();
     const loadingEl = document.getElementById('chatLoading');
     if (loadingEl) loadingEl.remove();
-    if(!res.ok) throw new Error(data.error || 'Request failed');
-    msgs.innerHTML += `<div class="chat-msg assistant">${data.answer}</div>`;
+    if (!res.ok) throw new Error(data.error || 'Request failed');
+    msgs.innerHTML += `<div class="chat-msg assistant">${formatChatAnswer(data.answer)}</div>`;
   } catch(err){
     const loadingEl = document.getElementById('chatLoading');
     if (loadingEl) loadingEl.remove();
-    msgs.innerHTML += `<div class="chat-msg assistant">Sorry, something went wrong: ${err.message}</div>`;
+    msgs.innerHTML += `<div class="chat-msg assistant">Error: ${err.message}</div>`;
   }
   msgs.scrollTop = msgs.scrollHeight;
 }
 
-// Marketing ticker (real, generic market tickers)
 async function loadMarketingTicker(){
   const el = document.getElementById('marketingTicker');
   try{
     const res = await fetch('/api/stocky', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'market', tickers: ['SPY','QQQ','NVDA','AAPL','MSFT'] })
+      body: JSON.stringify({ action:'market', tickers: ['SPY','QQQ','NVDA','AAPL','MSFT'], lang })
     });
     const data = await res.json();
-    if(!res.ok) throw new Error();
+    if (!res.ok) throw new Error();
     const html = Object.entries(data.prices||{}).map(([t,d])=>
       `<span class="${d.changePct>=0?'up':'down'}">${t} $${d.price} ${d.changePct>=0?'▲':'▼'}${Math.abs(d.changePct).toFixed(1)}%</span>`
     ).join('');
     el.innerHTML = html + html;
+    window.__lastMarketingData = data;
+    renderMarketingNews(data.news || []);
   } catch(e){
-    el.innerHTML = '<span>Market ticker unavailable.</span>';
+    el.innerHTML = '<span>Ticker unavailable.</span>';
   }
+}
+function renderMarketingNews(items){
+  const el = document.getElementById('marketingNews');
+  el.innerHTML = items.length ? items.map(n=>`
+    <div class="news-card">
+      <div class="thumb">${n.source||'News'}</div>
+      <div class="body">
+        <div class="source">${n.source||''}</div>
+        <h4>${n.headline}</h4>
+        <p>${n.summary||''}</p>
+        <a href="${n.url}" target="_blank" rel="noopener">${lang==='zh-TW'?'閱讀更多 →':'Read more →'}</a>
+      </div>
+    </div>
+  `).join('') : '<div class="feature-card">No live news available.</div>';
 }
 
 document.getElementById('txnDate').value = new Date().toISOString().slice(0,10);
+applyLang();
 loadMarketingTicker();
 renderAll();
 </script>

@@ -35,36 +35,45 @@ function parseJSON(text) {
   }
 }
 
+function langInstruction(lang) {
+  return lang === 'zh-TW'
+    ? 'Respond in Traditional Chinese (Taiwan/Hong Kong style, 繁體中文) for ALL text fields — headlines, summaries, reasons, notes, everything. Company/ticker names can stay in English.'
+    : 'Respond in English for all text fields.';
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
-    const { action } = req.body || {};
+    const { action, lang } = req.body || {};
+    const language = lang === 'zh-TW' ? 'zh-TW' : 'en';
 
     if (action === 'market') {
       const { tickers } = req.body;
       if (!Array.isArray(tickers) || tickers.length === 0) {
         return res.status(400).json({ error: 'No tickers provided.' });
       }
-      const prompt = `You have web search available. For these tickers: ${tickers.join(', ')} — look up each one's actual current price and today's percent change using web search, do not estimate from memory.
+      const prompt = `You have web search available. For these tickers: ${tickers.join(', ')} — look up each one's actual current price and today's percent change using web search, do not estimate from memory. Also classify each ticker into ONE broad sector, and give a rough volatility score 0-100 (clearly an estimate).
 
-Then, across this whole list, identify 1-4 genuine hidden-overlap clusters: cases where two or more of these specific tickers share real underlying risk (same supply chain, same sector demand driver, same macro exposure) that isn't obvious from the company names alone. Omit clusters if you find none — do not invent weak connections.
+Then, across this whole list, identify 1-4 genuine hidden-overlap clusters: cases where two or more of these specific tickers share real underlying risk that isn't obvious from the company names alone. For each cluster give: a confidence level (High/Medium/Low — how certain this overlap really is), the specific named shared mechanism (the actual company, facility, supply chain, or economic driver involved — e.g. "Both depend on TSMC's advanced-node fabs in Taiwan," not just "both are tech"), and 1-2 REAL current news items found via web search about that shared mechanism itself (real headline, real source, real URL from your search results, one factual summary sentence) — not generic news about each ticker individually. Omit a cluster entirely if you find no genuine overlap; do not invent weak connections just to have something to show.
 
-For any ticker with a real, notable recent pullback from a peak, include a recovery-context note describing how long similar past pullbacks for that stock or its sector have typically taken to recover, in plain language.
+For any ticker with a real, notable recent pullback from a peak, include a recovery-context note (typical recovery time for similar past pullbacks).
 
+Give a rough estimate of S&P 500 performance over 1 month, 6 months, 1 year, and a nominal "all time" window, clearly labeled as estimates.
+
+${langInstruction(language)}
 ${SYSTEM_RULES}
 
-Respond with ONLY raw JSON, no markdown fences, in this exact shape:
-{"prices":{"TICKER":{"name":"Company Name","price":123.45,"changePct":1.2}},"clusters":[{"label":["Two","Words"],"reason":"one plain sentence describing the shared risk","tickers":["TICKER1","TICKER2"]}],"recovery":[{"ticker":"TICKER","peak":150.0,"peakLabel":"May high","recoveryNote":"plain sentence on typical recovery time"}]}`;
+Respond with ONLY raw JSON, no markdown fences:
+{"prices":{"TICKER":{"name":"string","price":123.45,"changePct":1.2,"sector":"string","volatility":0}},"clusters":[{"label":["Two","Words"],"reason":"one plain sentence","mechanism":"specific named shared mechanism","confidence":"High|Medium|Low","tickers":["TICKER1","TICKER2"],"news":[{"headline":"string","source":"string","url":"https://real-url","summary":"one sentence"}]}],"recovery":[{"ticker":"TICKER","peak":150.0,"peakLabel":"string","recoveryNote":"string"}],"news":[{"headline":"string","source":"string","url":"https://real-url","summary":"string"}],"benchmark":{"oneMonthPct":1.2,"sixMonthPct":5.0,"oneYearPct":12.0,"allTimePct":30.0}}`;
 
       const data = await callClaude({
         model: 'claude-sonnet-4-6',
-        max_tokens: 3000,
+        max_tokens: 4500,
         messages: [{ role: 'user', content: prompt }],
         tools: [{ type: 'web_search_20250305', name: 'web_search' }]
       });
-      const parsed = parseJSON(extractText(data));
-      return res.status(200).json(parsed);
+      return res.status(200).json(parseJSON(extractText(data)));
     }
 
     if (action === 'ask') {
@@ -72,15 +81,16 @@ Respond with ONLY raw JSON, no markdown fences, in this exact shape:
       if (!question) return res.status(400).json({ error: 'No question provided.' });
 
       const context = `The person's current holdings: ${JSON.stringify(holdings || [])}.\nRecent portfolio summary: ${digest || 'none available'}.`;
+      const formatRules = `Format your answer as a short list of distinct points, not one dense paragraph. Each point: a bold 2-4 word label (wrap it like **Label**) followed by one concise sentence. Pull out any key numbers (percentages, dollar figures) and make them stand out clearly rather than burying them mid-sentence. Keep it scannable — 2-5 short points is usually enough, more only if genuinely needed.`;
+
       const data = await callClaude({
         model: 'claude-sonnet-4-6',
-        max_tokens: 500,
-        system: `You are Ask Stocky, grounded in the person's actual portfolio data below. Answer their question using this real data. ${SYSTEM_RULES}\n\n${context}`,
+        max_tokens: 700,
+        system: `You are Ask Stocky, grounded in the person's actual portfolio data below. ${SYSTEM_RULES}\n${formatRules}\n${langInstruction(language)}\n\n${context}`,
         messages: [{ role: 'user', content: question }],
         tools: [{ type: 'web_search_20250305', name: 'web_search' }]
       });
-      const answer = extractText(data);
-      return res.status(200).json({ answer });
+      return res.status(200).json({ answer: extractText(data) });
     }
 
     return res.status(400).json({ error: 'Unknown action.' });
