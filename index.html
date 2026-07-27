@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stocky</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --cream:#f7f4ee; --ink:#2b2b28; --ink-soft:#5a5a54;
+    --brass:#a8763f; --brass-bright:#c08e52;
+    --good:#3f7a4f; --warn:#a6392a; --line:#ddd6c6; --card:#fdfbf6;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:'Inter',sans-serif;}
+  a{color:var(--brass);text-decoration:none;}
+  .serif{font-family:'Newsreader',serif;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  .view{display:none;} .view.active{display:block;}
+
+  nav{display:flex;align-items:center;justify-content:space-between;padding:20px 40px;border-bottom:1px solid var(--line);}
+  .brand{font-family:'Newsreader',serif;font-style:italic;font-size:22px;font-weight:600;cursor:pointer;}
+  .navlinks{display:flex;align-items:center;gap:28px;font-size:14px;color:var(--ink-soft);}
+  .btn-dark{font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;border:1px solid var(--ink);background:var(--ink);color:var(--cream);cursor:pointer;}
+  .btn-outline{font-size:13px;font-weight:600;padding:10px 20px;border-radius:4px;border:1px solid var(--ink-soft);background:transparent;color:var(--ink);cursor:pointer;}
+
+  .hero{max-width:720px;margin:0 auto;padding:80px 30px 40px;text-align:center;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brass);margin-bottom:18px;}
+  .hero h1{font-family:'Newsreader',serif;font-weight:500;font-size:44px;line-height:1.15;margin:0 0 20px;}
+  .hero p{font-size:16px;line-height:1.6;color:var(--ink-soft);margin:0 0 26px;}
+  .hero-btns{display:flex;gap:12px;justify-content:center;margin-bottom:26px;}
+  .trust-pill{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border:1px solid #ddd0b0;border-radius:20px;background:#f2ead9;font-size:13px;}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--good);flex-shrink:0;}
+
+  .ticker-bar{background:var(--ink);padding:14px 0;overflow:hidden;white-space:nowrap;}
+  .ticker-track{display:inline-block;animation:scroll 35s linear infinite;font-family:'IBM Plex Mono',monospace;font-size:12px;}
+  .ticker-track span{margin-right:30px;color:#e8e2d0;}
+  .ticker-track .up{color:#8fbf9a;} .ticker-track .down{color:#d99a8a;}
+  @keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+  .section{max-width:1000px;margin:0 auto;padding:60px 30px;}
+  .section h2{font-family:'Newsreader',serif;font-weight:500;font-size:28px;text-align:center;margin:0 0 10px;}
+  .section .lead{text-align:center;font-size:14px;color:var(--ink-soft);margin:0 0 40px;max-width:500px;margin-left:auto;margin-right:auto;}
+  .feature-grid{display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:20px;}
+  .feature-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:26px;}
+  .feature-card h3{font-family:'Newsreader',serif;font-size:18px;margin:0 0 8px;}
+  .feature-card p{font-size:13.5px;line-height:1.6;color:var(--ink-soft);margin:0;}
+
+  .pricing-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+  .price-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px 20px;}
+  .price-card.featured{border-color:var(--brass);background:#f5ecd8;}
+  .price-card .tier{font-family:'Newsreader',serif;font-size:18px;margin-bottom:4px;}
+  .price-card .blurb{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
+  .price-card .amount{font-family:'Newsreader',serif;font-size:26px;margin-bottom:16px;}
+  .price-card .amount span{font-size:12px;color:var(--ink-soft);font-family:'Inter',sans-serif;}
+  .price-card ul{margin:0 0 16px;padding:0;list-style:none;font-size:12.5px;color:var(--ink-soft);line-height:2;}
+  .price-card button{width:100%;padding:10px;border-radius:4px;border:1px solid var(--ink);background:transparent;color:var(--ink);font-weight:600;font-size:13px;cursor:pointer;}
+  .price-card.featured button{background:var(--ink);color:var(--cream);}
+
+  /* Dashboard */
+  .hero-number{max-width:1000px;margin:0 auto;padding:40px 30px 0;}
+  .greeting{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:8px;}
+  .big-num{font-family:'Newsreader',serif;font-size:48px;font-weight:600;}
+  .sub-stats{display:flex;gap:24px;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+  .sub-stats .lbl{color:var(--ink-soft);font-family:'Inter',sans-serif;font-size:11px;margin-right:6px;}
+  .up{color:var(--good);} .down{color:var(--warn);}
+
+  .dash-tabs{max-width:1000px;margin:20px auto 0;padding:0 30px;display:flex;gap:8px;border-bottom:1px solid var(--line);}
+  .dash-tab{padding:10px 16px;font-size:13px;font-weight:600;color:var(--ink-soft);cursor:pointer;border-bottom:2px solid transparent;}
+  .dash-tab.active{color:var(--ink);border-color:var(--brass);}
+
+  .dash-panel{max-width:1000px;margin:0 auto;padding:24px 30px 60px;display:none;}
+  .dash-panel.active{display:block;}
+  .card-box{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px;margin-bottom:16px;}
+  #chart{width:100%;height:140px;display:block;}
+  .concentration-bar-bg{background:#e8e2d0;height:8px;border-radius:4px;overflow:hidden;margin:10px 0;}
+  .concentration-bar{height:100%;background:var(--warn);}
+
+  #overlapSvg{width:100%;height:220px;display:block;}
+  .cluster-note{font-size:13px;line-height:1.6;margin-bottom:8px;}
+
+  .holding-row{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:12px 0;}
+  .holding-row:last-child{border-bottom:none;}
+  .h-ticker{font-family:'IBM Plex Mono',monospace;font-weight:700;width:60px;}
+  .h-shares{font-size:11px;color:var(--ink-soft);width:70px;}
+  .h-news{flex:1;font-size:13px;}
+  .h-nums{text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13px;}
+
+  .txn-form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+  .txn-form input,.txn-form select{padding:9px 10px;border:1px solid var(--line);border-radius:4px;font-size:13px;font-family:inherit;}
+  .txn-form button{background:var(--ink);color:var(--cream);border:none;padding:9px 18px;border-radius:4px;font-weight:600;cursor:pointer;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{text-align:left;font-size:10.5px;text-transform:uppercase;color:var(--ink-soft);padding:8px 6px;border-bottom:1px solid var(--line);}
+  td{padding:9px 6px;border-bottom:1px solid var(--line);font-family:'IBM Plex Mono',monospace;}
+
+  .chat-msg{max-width:75%;padding:12px 16px;border-radius:8px;margin-bottom:10px;font-size:13.5px;line-height:1.5;}
+  .chat-msg.assistant{background:var(--card);border:1px solid var(--line);}
+  .chat-msg.user{background:var(--ink);color:var(--cream);margin-left:auto;}
+  .chat-input-row{display:flex;gap:8px;margin-top:14px;}
+  .chat-input-row input{flex:1;padding:11px 14px;border:1px solid var(--line);border-radius:6px;font-size:13.5px;}
+  .chat-input-row button{background:var(--ink);color:var(--cream);border:none;padding:11px 18px;border-radius:6px;font-weight:600;cursor:pointer;}
+
+  .status-line{font-size:12px;color:var(--ink-soft);margin-bottom:10px;}
+  .status-line.err{color:var(--warn);}
+  .disclaimer{text-align:center;font-size:11px;color:var(--ink-soft);padding:20px 0 40px;}
+
+  @media(max-width:800px){ .feature-grid{grid-template-columns:1fr;} .pricing-grid{grid-template-columns:1fr 1fr;} }
+</style>
+</head>
+<body>
+
+<!-- MARKETING VIEW -->
+<div id="marketingView" class="view active">
+  <nav>
+    <div class="brand" onclick="showDashboard()">Stocky</div>
+    <div class="navlinks">
+      <a href="#features">Product</a>
+      <a href="#trust">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <button class="btn-dark" onclick="showDashboard()">Open Dashboard</button>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <div class="eyebrow">Portfolio risk, made visible</div>
+    <h1>The overlap hiding inside your "diversified" portfolio.</h1>
+    <p>Stocky is the only tracker that finds shared risk between stocks that look unrelated — two AI-chip names, one supply chain, one bad week — and shows you before you have to ask.</p>
+    <div class="hero-btns">
+      <button class="btn-dark" onclick="showDashboard()">See your overlap</button>
+      <a href="#trust" class="btn-outline" style="display:inline-block;">How it works</a>
+    </div>
+    <div class="trust-pill"><span class="dot"></span> No bank or brokerage linking — ever. You tell us what you own.</div>
+  </div>
+
+  <div class="ticker-bar"><div class="ticker-track" id="marketingTicker"><span>Loading market ticker...</span></div></div>
+
+  <div class="section" id="features">
+    <h2>One memory, three ways to use it.</h2>
+    <p class="lead">Stocky remembers exactly what you own — so it can do things a person starting from scratch with a chatbot can't.</p>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>Hidden overlap, found automatically</h3>
+        <p>Two holdings can look unrelated and still share a supply chain, a sector, or a macro exposure. Stocky maps the connection and explains it in plain terms — before you ask.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Recovery, in context</h3>
+        <p>Not just "down 12%" — how long similar pullbacks have typically taken to recover, so a dip reads as a moment in time, not just a number.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Ask Stocky anything</h3>
+        <p>A real question, answered with your actual holdings already in mind. No re-explaining your portfolio every time. Never a buy, sell, or hold call.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="trust">
+    <h2>How your data works</h2>
+    <p class="lead">Plainly, since new finance apps have to earn this.</p>
+    <div class="feature-grid">
+      <div class="feature-card"><h3>01 — You type it in.</h3><p>No bank credentials, no account linking. Every share count comes from you.</p></div>
+      <div class="feature-card"><h3>02 — Yours to take.</h3><p>Export everything anytime, or clear it in one click.</p></div>
+      <div class="feature-card"><h3>03 — We describe, never advise.</h3><p>No buy/sell/hold calls, ever. Uncertain data is flagged, not hidden.</p></div>
+    </div>
+  </div>
+
+  <div class="section" id="pricing">
+    <h2>Pricing</h2>
+    <div class="pricing-grid">
+      <div class="price-card"><div class="tier">Free</div><div class="blurb">For a first look</div><div class="amount">$0<span>/mo</span></div><ul><li>Up to 5 holdings</li><li>Basic concentration score</li><li>Manual entry only</li></ul><button>Choose Free</button></div>
+      <div class="price-card"><div class="tier">Starter</div><div class="blurb">For one real portfolio</div><div class="amount">$9<span>/mo</span></div><ul><li>Unlimited holdings</li><li>Full overlap diagram</li><li>Transaction log & export</li></ul><button>Choose Starter</button></div>
+      <div class="price-card featured"><div class="tier">Pro</div><div class="blurb">For active tracking</div><div class="amount">$19<span>/mo</span></div><ul><li>Everything in Starter</li><li>Ask Stocky, unlimited</li><li>Multiple portfolios</li></ul><button>Choose Pro</button></div>
+      <div class="price-card"><div class="tier">Advisor</div><div class="blurb">For managing others' money</div><div class="amount">$49<span>/mo per client</span></div><ul><li>Everything in Pro</li><li>Multi-client dashboard</li><li>White-label export</li></ul><button>Choose Advisor</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD VIEW -->
+<div id="dashboardView" class="view">
+  <nav>
+    <div class="brand" onclick="showMarketing()">Stocky</div>
+    <div class="navlinks">
+      <button class="btn-outline" onclick="showMarketing()">Home</button>
+    </div>
+  </nav>
+
+  <div class="hero-number">
+    <div class="greeting">Total portfolio value</div>
+    <div class="big-num" id="totalValue">$0</div>
+    <div class="sub-stats">
+      <div><span class="lbl">TODAY</span><span id="totalChange">—</span></div>
+      <div><span class="lbl">CONCENTRATION</span><span id="concentrationLabel">—</span></div>
+    </div>
+  </div>
+
+  <div class="dash-tabs">
+    <div class="dash-tab active" data-tab="portfolio" onclick="switchTab('portfolio')">Portfolio</div>
+    <div class="dash-tab" data-tab="transactions" onclick="switchTab('transactions')">Transactions</div>
+    <div class="dash-tab" data-tab="digest" onclick="switchTab('digest')">Digest</div>
+    <div class="dash-tab" data-tab="ask" onclick="switchTab('ask')">Ask Stocky</div>
+  </div>
+
+  <!-- Portfolio panel -->
+  <div class="dash-panel active" id="panel-portfolio">
+    <div class="status-line" id="marketStatus">Add holdings, then click Refresh to pull live data.</div>
+    <button class="btn-dark" onclick="refreshMarket()" id="refreshBtn" style="margin-bottom:20px;">Refresh live data</button>
+
+    <div class="card-box">
+      <svg id="chart" viewBox="0 0 800 140"></svg>
+    </div>
+
+    <div class="card-box">
+      <strong>Concentration</strong>
+      <div class="concentration-bar-bg"><div class="concentration-bar" id="concentrationBar" style="width:0%;"></div></div>
+      <div style="font-size:13px;color:var(--ink-soft);" id="concentrationText">Add holdings to see concentration.</div>
+    </div>
+
+    <div class="card-box">
+      <strong>Hidden overlap</strong>
+      <svg id="overlapSvg" viewBox="0 0 600 220"></svg>
+      <div id="clusterNotes"></div>
+    </div>
+
+    <div class="card-box" id="holdingsBox">
+      <strong>Holdings</strong>
+      <div id="holdingsList" style="margin-top:10px;"></div>
+    </div>
+  </div>
+
+  <!-- Transactions panel -->
+  <div class="dash-panel" id="panel-transactions">
+    <div class="card-box">
+      <div class="txn-form">
+        <select id="txnType"><option value="buy">Buy</option><option value="sell">Sell</option></select>
+        <input type="text" id="txnTicker" placeholder="Ticker">
+        <input type="date" id="txnDate">
+        <input type="number" id="txnShares" placeholder="Shares">
+        <input type="number" step="0.01" id="txnPrice" placeholder="Price">
+        <button onclick="addTransaction()">Log</button>
+      </div>
+      <div id="txnError" style="color:var(--warn);font-size:12px;"></div>
+    </div>
+    <div class="card-box">
+      <table>
+        <thead><tr><th>Date</th><th>Type</th><th>Ticker</th><th>Shares</th><th>Price</th><th></th></tr></thead>
+        <tbody id="txnTable"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Digest panel -->
+  <div class="dash-panel" id="panel-digest">
+    <div class="card-box">
+      <div class="mono" style="font-size:11px;color:var(--brass);margin-bottom:10px;">THIS WEEK</div>
+      <p id="digestText" style="font-size:15px;line-height:1.7;">Add holdings and refresh live data to generate your digest.</p>
+    </div>
+  </div>
+
+  <!-- Ask panel -->
+  <div class="dash-panel" id="panel-ask">
+    <div class="card-box">
+      <div id="chatMessages">
+        <div class="chat-msg assistant">I can answer questions about your current holdings — like why your portfolio moved, or which positions share risk. I describe what's happening; I don't tell you what to do.</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="Ask about your portfolio..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="disclaimer">Informational only — not investment advice.</div>
+</div>
+
+<script>
+const LS_KEY = 'stocky:transactions';
+let transactions = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+let marketData = { prices:{}, clusters:[], recovery:[] };
+const palette = ['#a8763f','#5b8fb0','#9770a8','#7ba887','#c07a8a','#c99a4a'];
+function colorFor(ticker){ let h=0; for(let i=0;i<ticker.length;i++) h=(h*31+ticker.charCodeAt(i))%palette.length; return palette[h]; }
+
+function showDashboard(){ document.getElementById('marketingView').classList.remove('active'); document.getElementById('dashboardView').classList.add('active'); renderAll(); }
+function showMarketing(){ document.getElementById('dashboardView').classList.remove('active'); document.getElementById('marketingView').classList.add('active'); }
+function switchTab(tab){
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.toggle('active', t.dataset.tab===tab));
+  document.querySelectorAll('.dash-panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+tab));
+}
+
+function computeHoldings(){
+  const map = {};
+  transactions.slice().sort((a,b)=>a.date<b.date?-1:1).forEach(t=>{
+    if(!map[t.ticker]) map[t.ticker]={shares:0,cost:0};
+    const h = map[t.ticker];
+    if(t.type==='buy'){ h.shares+=t.shares; h.cost+=t.shares*t.price; }
+    else { const avg = h.shares>0?h.cost/h.shares:0; h.shares-=t.shares; h.cost-=t.shares*avg; if(h.shares<0)h.shares=0; }
+  });
+  return Object.keys(map).filter(k=>map[k].shares>0.0001).map(ticker=>{
+    const h = map[ticker];
+    const meta = marketData.prices[ticker] || {name:ticker, price:0, changePct:0};
+    const value = h.shares*meta.price;
+    return {ticker, shares:Math.round(h.shares*100)/100, cost:h.cost, avgCost:h.cost/h.shares, value, gain:value-h.cost, price:meta.price, changePct:meta.changePct, name:meta.name};
+  });
+}
+
+function saveTxns(){ localStorage.setItem(LS_KEY, JSON.stringify(transactions)); }
+
+function addTransaction(){
+  const type = document.getElementById('txnType').value;
+  const ticker = document.getElementById('txnTicker').value.trim().toUpperCase();
+  const date = document.getElementById('txnDate').value || new Date().toISOString().slice(0,10);
+  const shares = parseFloat(document.getElementById('txnShares').value);
+  const price = parseFloat(document.getElementById('txnPrice').value);
+  const errEl = document.getElementById('txnError');
+  if(!ticker || !shares || shares<=0){ errEl.textContent='Enter a ticker and a positive share count.'; return; }
+  if(!price || price<=0){ errEl.textContent='Enter a positive price.'; return; }
+  errEl.textContent='';
+  transactions.push({id:Date.now(), date, ticker, type, shares, price});
+  saveTxns();
+  document.getElementById('txnTicker').value=''; document.getElementById('txnShares').value=''; document.getElementById('txnPrice').value='';
+  renderAll();
+}
+function deleteTxn(id){ transactions = transactions.filter(t=>t.id!==id); saveTxns(); renderAll(); }
+
+async function refreshMarket(){
+  const holdings = computeHoldings();
+  if(holdings.length===0) return;
+  const btn = document.getElementById('refreshBtn');
+  const statusEl = document.getElementById('marketStatus');
+  btn.disabled = true; btn.textContent='Fetching live data...';
+  statusEl.textContent = 'Pulling live prices, overlap, and recovery context — 15-30s.'; statusEl.className='status-line';
+  try{
+    const res = await fetch('/api/stocky', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'market', tickers: holdings.map(h=>h.ticker) })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Request failed');
+    marketData = data;
+    statusEl.textContent = 'Live data as of ' + new Date().toLocaleTimeString(); statusEl.className='status-line';
+  } catch(err){
+    statusEl.textContent = 'Live data unavailable: ' + err.message; statusEl.className='status-line err';
+  } finally {
+    btn.disabled=false; btn.textContent='Refresh live data';
+    renderAll();
+  }
+}
+
+function renderAll(){
+  const holdings = computeHoldings();
+  const totalValue = holdings.reduce((a,h)=>a+h.value,0);
+  const totalCost = holdings.reduce((a,h)=>a+h.cost,0);
+  const totalGainPct = totalCost>0 ? (totalValue-totalCost)/totalCost*100 : 0;
+
+  document.getElementById('totalValue').textContent = '$'+totalValue.toLocaleString(undefined,{maximumFractionDigits:0});
+  const changeEl = document.getElementById('totalChange');
+  changeEl.textContent = (totalGainPct>=0?'+':'')+totalGainPct.toFixed(1)+'%';
+  changeEl.className = totalGainPct>=0?'up':'down';
+
+  const clusterTickers = new Set((marketData.clusters||[]).flatMap(c=>c.tickers));
+  const overlapValue = holdings.filter(h=>clusterTickers.has(h.ticker)).reduce((a,h)=>a+h.value,0);
+  const concentrationPct = totalValue>0 ? overlapValue/totalValue*100 : 0;
+  const concLabel = document.getElementById('concentrationLabel');
+  const level = concentrationPct>=60?'High':concentrationPct>=25?'Moderate':'Low';
+  concLabel.textContent = level;
+  concLabel.className = level==='High'?'down':level==='Moderate'?'':'up';
+  document.getElementById('concentrationBar').style.width = concentrationPct.toFixed(0)+'%';
+  document.getElementById('concentrationText').textContent = holdings.length? `${concentrationPct.toFixed(0)}% of your portfolio sits inside detected overlap clusters.` : 'Add holdings to see concentration.';
+
+  // Chart
+  const chart = document.getElementById('chart');
+  chart.innerHTML='';
+  const sorted = transactions.slice().sort((a,b)=>a.date<b.date?-1:1);
+  let running=0; const points=[0];
+  sorted.forEach(t=>{ running += (t.type==='buy'?1:-1)*t.shares*t.price; points.push(running); });
+  if(points.length>1){
+    const max=Math.max(...points,1), min=Math.min(...points,0), range=(max-min)||1;
+    const w=800,h=140,pad=6, stepX=(w-pad*2)/(points.length-1);
+    const coords = points.map((v,i)=>[pad+i*stepX, h-pad-((v-min)/range)*(h-pad*2)]);
+    const path = coords.map((c,i)=>(i===0?'M':'L')+c[0].toFixed(1)+','+c[1].toFixed(1)).join(' ');
+    const area = path+` L${coords[coords.length-1][0]},${h} L${coords[0][0]},${h} Z`;
+    chart.innerHTML = `<path d="${area}" fill="#a8763f" opacity="0.15"></path><path d="${path}" fill="none" stroke="#a8763f" stroke-width="2"></path>`;
+  }
+
+  // Overlap diagram
+  const overlapSvg = document.getElementById('overlapSvg');
+  overlapSvg.innerHTML='';
+  const clusterNotes = document.getElementById('clusterNotes');
+  const clusters = marketData.clusters || [];
+  if(clusters.length===0 || holdings.length===0){
+    clusterNotes.innerHTML = holdings.length===0 ? '<p style="font-size:13px;color:var(--ink-soft);">Add holdings to check for overlap.</p>' : '<p style="font-size:13px;color:var(--ink-soft);">No hidden overlap detected among your current holdings.</p>';
+  } else {
+    const n = holdings.length, cx=300, cy=110, r=80;
+    const pos={};
+    holdings.forEach((h,i)=>{ const a=(2*Math.PI*i/n)-Math.PI/2; pos[h.ticker]=[cx+r*Math.cos(a), cy+r*Math.sin(a)]; });
+    let svgHtml='';
+    clusters.forEach(c=>{
+      for(let i=0;i<c.tickers.length;i++) for(let j=i+1;j<c.tickers.length;j++){
+        const a=pos[c.tickers[i]], b=pos[c.tickers[j]];
+        if(a&&b) svgHtml += `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#a8763f" stroke-width="2" stroke-dasharray="4 3" opacity="0.6"></line>`;
+      }
+    });
+    holdings.forEach(h=>{
+      const p = pos[h.ticker];
+      svgHtml += `<circle cx="${p[0]}" cy="${p[1]}" r="22" fill="#fdfbf6" stroke="${colorFor(h.ticker)}" stroke-width="2"></circle><text x="${p[0]}" y="${p[1]+4}" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="#2b2b28">${h.ticker}</text>`;
+    });
+    overlapSvg.innerHTML = svgHtml;
+    clusterNotes.innerHTML = clusters.map(c=>`<div class="cluster-note">⬤ <strong>${c.tickers.join(' + ')}</strong> — ${c.reason}</div>`).join('');
+  }
+
+  // Holdings list
+  const holdingsList = document.getElementById('holdingsList');
+  if(holdings.length===0){
+    holdingsList.innerHTML = '<p style="font-size:13px;color:var(--ink-soft);">No holdings yet. Log a buy in the Transactions tab.</p>';
+  } else {
+    holdingsList.innerHTML = holdings.map(h=>{
+      const rec = (marketData.recovery||[]).find(r=>r.ticker===h.ticker);
+      const news = rec ? `Down from its ${rec.peakLabel} — ${rec.recoveryNote}` : (h.price? 'Live price loaded.' : 'Click Refresh for live data.');
+      const gainPct = h.cost>0? (h.gain/h.cost*100):0;
+      return `<div class="holding-row">
+        <div class="h-ticker" style="color:${colorFor(h.ticker)};">${h.ticker}</div>
+        <div class="h-shares">${h.shares} sh</div>
+        <div class="h-news">${news}</div>
+        <div class="h-nums">$${h.value.toLocaleString(undefined,{maximumFractionDigits:0})}<br><span class="${gainPct>=0?'up':'down'}">${gainPct>=0?'+':''}${gainPct.toFixed(1)}%</span></div>
+      </div>`;
+    }).join('');
+  }
+
+  // Transactions table
+  const txnTable = document.getElementById('txnTable');
+  txnTable.innerHTML = transactions.slice().sort((a,b)=>a.date<b.date?1:-1).map(t=>`
+    <tr><td>${t.date}</td><td style="color:${t.type==='buy'?'var(--good)':'var(--warn)'}">${t.type.toUpperCase()}</td><td>${t.ticker}</td><td>${t.shares}</td><td>$${t.price.toFixed(2)}</td>
+    <td><button onclick="deleteTxn(${t.id})" style="background:none;border:none;color:var(--warn);cursor:pointer;">✕</button></td></tr>
+  `).join('');
+
+  // Digest
+  const digestEl = document.getElementById('digestText');
+  if(holdings.length>0){
+    const topGainer = holdings.slice().sort((a,b)=>(b.gain/b.cost||0)-(a.gain/a.cost||0))[0];
+    const overlapCount = holdings.filter(h=>clusterTickers.has(h.ticker)).length;
+    digestEl.textContent = `${topGainer.ticker} is your standout mover, and the portfolio overall is ${totalGainPct>=0?'up':'down'} ${Math.abs(totalGainPct).toFixed(0)}% since you started tracking. ${overlapCount} of your ${holdings.length} holdings sit inside a detected overlap cluster — nothing to act on, just worth knowing.`;
+  }
+}
+
+async function sendChat(){
+  const input = document.getElementById('chatInput');
+  const q = input.value.trim();
+  if(!q) return;
+  const msgs = document.getElementById('chatMessages');
+  msgs.innerHTML += `<div class="chat-msg user">${q}</div>`;
+  input.value='';
+  msgs.innerHTML += `<div class="chat-msg assistant" id="chatLoading">Thinking...</div>`;
+  msgs.scrollTop = msgs.scrollHeight;
+  const holdings = computeHoldings();
+  try{
+    const res = await fetch('/api/stocky', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'ask', question:q, holdings, digest: document.getElementById('digestText').textContent })
+    });
+    const data = await res.json();
+    document.getElementById('chatLoading').remove();
+    if(!res.ok) throw new Error(data.error || 'Request failed');
+    msgs.innerHTML += `<div class="chat-msg assistant">${data.answer}</div>`;
+  } catch(err){
+    document.getElementById('chatLoading').remove();
+    msgs.innerHTML += `<div class="chat-msg assistant">Sorry, something went wrong: ${err.message}</div>`;
+  }
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+// Marketing ticker (real, generic market tickers)
+async function loadMarketingTicker(){
+  const el = document.getElementById('marketingTicker');
+  try{
+    const res = await fetch('/api/stocky', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'market', tickers: ['SPY','QQQ','NVDA','AAPL','MSFT'] })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error();
+    const html = Object.entries(data.prices||{}).map(([t,d])=>
+      `<span class="${d.changePct>=0?'up':'down'}">${t} $${d.price} ${d.changePct>=0?'▲':'▼'}${Math.abs(d.changePct).toFixed(1)}%</span>`
+    ).join('');
+    el.innerHTML = html + html;
+  } catch(e){
+    el.innerHTML = '<span>Market ticker unavailable.</span>';
+  }
+}
+
+document.getElementById('txnDate').value = new Date().toISOString().slice(0,10);
+loadMarketingTicker();
+renderAll();
+</script>
+</body>
+</html>
