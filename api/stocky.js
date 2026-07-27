@@ -84,13 +84,15 @@ Then, across this whole list, identify 1-4 genuine hidden-overlap clusters: case
 
 For any ticker with a real, notable recent pullback from a peak, include a recovery-context note (typical recovery time for similar past pullbacks).
 
+Also estimate two 12-month relative trajectories as arrays of 12 numbers 0-100 (oldest first, clearly labeled as rough estimates, not certified history): "trend" for this overall holding set's typical sector movement, and "benchmarkTrend" for the S&P 500 over the SAME period, so they can be compared on the same chart.
+
 Give a rough estimate of S&P 500 performance over 1 month, 6 months, 1 year, and a nominal "all time" window, clearly labeled as estimates.
 
 ${langInstruction(language)}
 ${SYSTEM_RULES}
 
 Respond with ONLY raw JSON, no markdown fences:
-{"prices":{"TICKER":{"name":"string","price":123.45,"changePct":1.2,"sector":"string","volatility":0}},"clusters":[{"label":["Two","Words"],"reason":"one plain sentence","mechanism":"specific named shared mechanism","confidence":"High|Medium|Low","tickers":["TICKER1","TICKER2"],"news":[{"headline":"string","source":"string","url":"https://real-url","summary":"one sentence"}]}],"recovery":[{"ticker":"TICKER","peak":150.0,"peakLabel":"string","recoveryNote":"string"}],"news":[{"headline":"string","source":"string","url":"https://real-url","summary":"string"}],"benchmark":{"oneMonthPct":1.2,"sixMonthPct":5.0,"oneYearPct":12.0,"allTimePct":30.0}}`;
+{"prices":{"TICKER":{"name":"string","price":123.45,"changePct":1.2,"sector":"string","volatility":0}},"clusters":[{"label":["Two","Words"],"reason":"one plain sentence","mechanism":"specific named shared mechanism","confidence":"High|Medium|Low","tickers":["TICKER1","TICKER2"],"news":[{"headline":"string","source":"string","url":"https://real-url","summary":"one sentence"}]}],"recovery":[{"ticker":"TICKER","peak":150.0,"peakLabel":"string","recoveryNote":"string"}],"trend":[12 numbers 0-100],"benchmarkTrend":[12 numbers 0-100],"benchmark":{"oneMonthPct":1.2,"sixMonthPct":5.0,"oneYearPct":12.0,"allTimePct":30.0}}`;
 
       const data = await callClaude({
         model: 'claude-sonnet-4-6',

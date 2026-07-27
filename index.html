@@ -131,7 +131,15 @@
   .disclaimer{text-align:center;font-size:11px;color:var(--text-dim);padding:20px 0 40px;}
   .empty-state{border:1px dashed var(--line);border-radius:6px;padding:28px 20px;text-align:center;color:var(--text-dim);font-size:13.5px;}
   .empty-state .bear-mascot{width:40px;height:40px;margin-bottom:10px;opacity:0.7;}
-  .estimate-note{font-size:10.5px;color:var(--text-dim);font-style:italic;margin-top:6px;}
+  .gauge-wrap{display:flex;align-items:center;gap:20px;}
+  #gaugeSvg{width:140px;height:80px;flex-shrink:0;}
+  .range-toggle{display:flex;gap:4px;}
+  .range-btn{padding:5px 12px;border-radius:4px;border:1px solid var(--line);background:transparent;color:var(--text-dim);font-size:11.5px;font-weight:600;cursor:pointer;}
+  .range-btn.active{background:var(--brass);color:#1a1408;border-color:var(--brass);}
+  #benchChart{width:100%;height:170px;display:block;}
+  .bench-legend{display:flex;gap:20px;margin-top:8px;font-size:12px;color:var(--text-dim);}
+  .bench-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .bench-dot{width:14px;height:2.5px;display:inline-block;}
 
   .pulse-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:18px;}
   .pulse-main{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px;}
@@ -150,7 +158,13 @@
   .mover-card .mv-ticker{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;}
   .mover-card .mv-name{font-size:11px;color:var(--text-dim);margin:2px 0 6px;}
   .mover-card .mv-note{font-size:12px;color:var(--text);}
+  .shot-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+  .shot-card img{width:100%;border-radius:6px;border:1px solid var(--line);display:block;margin-bottom:10px;}
+  .shot-card h4{font-family:'Newsreader',serif;font-size:15px;margin:0 0 4px;}
+  .shot-card p{font-size:12.5px;color:var(--text-dim);margin:0;line-height:1.5;}
+
   @media(max-width:820px){
+    .shot-grid{grid-template-columns:1fr;}
     .feature-grid, .pricing-grid, .step-grid, .news-grid, .pulse-grid, .movers-grid{grid-template-columns:1fr;}
     .hero h1{font-size:30px;}
     nav{padding:14px 16px;}
@@ -227,6 +241,33 @@
     </div>
   </div>
 
+  <div class="section">
+    <h2 data-t="learnTitle">See it in action</h2>
+    <p class="lead" data-t="learnSubtitle">Real screens from the dashboard.</p>
+    <div class="shot-grid">
+      <div class="shot-card">
+        <img src="./assets/example-portfolio.png" alt="Portfolio overview">
+        <h4 data-t="video1Title">Your portfolio at a glance</h4>
+        <p data-t="video1Desc">Total value, gain/loss, cost basis, and an estimated trend the moment you log in.</p>
+      </div>
+      <div class="shot-card">
+        <img src="./assets/example-overlap.png" alt="Overlap diagram">
+        <h4 data-t="video2Title">The overlap diagram</h4>
+        <p data-t="video2Desc">Visualizes the specific, named risk factors your holdings secretly share.</p>
+      </div>
+      <div class="shot-card">
+        <img src="./assets/example-holdings.png" alt="Holdings table">
+        <h4 data-t="video3Title">Your holdings table</h4>
+        <p data-t="video3Desc">Every position with shares, average cost, current value, and gain/loss.</p>
+      </div>
+      <div class="shot-card">
+        <img src="./assets/example-ask-stocky.png" alt="Ask Stocky chat">
+        <h4 data-t="video4Title">Ask Stocky</h4>
+        <p data-t="video4Desc">Plain-English answers about your portfolio, always grounded in your actual numbers.</p>
+      </div>
+    </div>
+  </div>
+
   <div class="section" id="pricingSection">
     <h2 data-t="pricingTitle">Pricing</h2>
     <div class="pricing-grid">
@@ -269,14 +310,40 @@
     <button class="btn-dark" onclick="refreshMarket()" id="refreshBtn" style="margin-bottom:18px;" data-t="refresh">Refresh live data</button>
 
     <div class="card-box">
-      <svg id="chart" viewBox="0 0 800 130"></svg>
-      <div id="benchmarkNote" class="status-line"></div>
+      <strong data-t="valueOverTime">Portfolio value over time</strong>
+      <svg id="chart" viewBox="0 0 800 130" style="margin-top:10px;"></svg>
     </div>
 
     <div class="card-box">
-      <strong data-t="concLabel">Concentration</strong>
-      <div class="concentration-bar-bg"><div class="concentration-bar" id="concentrationBar" style="width:0%;"></div></div>
-      <div style="font-size:13px;color:var(--text-dim);" id="concentrationText" data-t="addToSee">Add holdings to see concentration.</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:10px;">
+        <strong data-t="perfVsSp">Performance vs. S&P 500 (estimated)</strong>
+        <div class="range-toggle" id="benchRangeToggle">
+          <button class="range-btn" data-range="1M">1M</button>
+          <button class="range-btn" data-range="6M">6M</button>
+          <button class="range-btn active" data-range="1Y">1Y</button>
+          <button class="range-btn" data-range="All">All</button>
+        </div>
+      </div>
+      <svg id="benchChart" viewBox="0 0 600 170"></svg>
+      <div class="bench-legend">
+        <span><span class="bench-dot" style="background:var(--brass);"></span><span id="portLegend" data-t="yourPortfolio">Your portfolio</span></span>
+        <span><span class="bench-dot" style="background:var(--azure);"></span><span id="benchLegend" data-t="spModeled">S&P 500 (modeled)</span></span>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <div class="gauge-wrap">
+        <svg id="gaugeSvg" viewBox="0 0 140 80"></svg>
+        <div style="flex:1;">
+          <strong data-t="concLabel">Concentration</strong>
+          <div style="font-size:13px;color:var(--text-dim);margin-top:6px;" id="concentrationText" data-t="addToSee">Add holdings to see concentration.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-box">
+      <strong data-t="recoveryContext">Recovery context</strong>
+      <p id="recoveryText" style="font-size:13.5px;line-height:1.6;color:var(--text-dim);margin:10px 0 0;"></p>
     </div>
 
     <div class="card-box">
@@ -373,7 +440,15 @@ const T = {
     chatPlaceholder:'Ask about your portfolio...', send:'Send',
     disclaimer:'Informational only — not investment advice.',
     noOverlap:'No meaningful overlap detected — holdings look genuinely diversified.',
-    verifyManually:'estimate — verify manually', liveAsOf:'Live data as of'
+    verifyManually:'estimate — verify manually', liveAsOf:'Live data as of',
+    perfVsSp:'Performance vs. S&P 500 (estimated)', yourPortfolio:'Your portfolio', spModeled:'S&P 500 (modeled)',
+    recoveryContext:'Recovery context', recoveryEmpty:'Add holdings and refresh live data to see recovery context.',
+    recoveryNear:'Your portfolio is at or near its recent modeled peak — no recovery context needed right now.',
+    learnTitle:'See it in action', learnSubtitle:'Real screens from the dashboard.',
+    video1Title:'Your portfolio at a glance', video1Desc:'Total value, gain/loss, cost basis, and an estimated trend the moment you log in.',
+    video2Title:'The overlap diagram', video2Desc:'Visualizes the specific, named risk factors your holdings secretly share.',
+    video3Title:'Your holdings table', video3Desc:'Every position with shares, average cost, current value, and gain/loss.',
+    video4Title:'Ask Stocky', video4Desc:'Plain-English answers about your portfolio, always grounded in your actual numbers.'
   },
   'zh-TW': {
     howItWorks:'運作方式', pricing:'價格方案', openDashboard:'開啟儀表板',
@@ -407,7 +482,15 @@ const T = {
     chatPlaceholder:'詢問關於您投資組合的問題...', send:'送出',
     disclaimer:'僅供參考，非投資建議。',
     noOverlap:'未偵測到明顯的關聯風險——持股看起來確實足夠分散。',
-    verifyManually:'估計值——請自行核實', liveAsOf:'即時資料更新於'
+    verifyManually:'估計值——請自行核實', liveAsOf:'即時資料更新於',
+    perfVsSp:'與標普500比較（估計值）', yourPortfolio:'您的投資組合', spModeled:'標普500（模擬）',
+    recoveryContext:'回升情境參考', recoveryEmpty:'新增持股並更新即時資料以查看回升情境參考。',
+    recoveryNear:'您的投資組合目前接近模擬高點——暫不需要回升情境參考。',
+    learnTitle:'實際畫面預覽', learnSubtitle:'儀表板的真實畫面。',
+    video1Title:'一目了然的投資組合', video1Desc:'登入後立即看到總值、損益、成本基礎與估算趨勢圖。',
+    video2Title:'關聯風險圖', video2Desc:'展示您的持股之間實際共享的具體風險因素。',
+    video3Title:'持股列表', video3Desc:'每筆持股的股數、平均成本、市值與損益。',
+    video4Title:'詢問 Stocky', video4Desc:'關於您投資組合的白話回答，始終基於您的真實數字。'
   }
 };
 
@@ -432,7 +515,16 @@ function toggleLang(){
 
 const LS_KEY = 'stocky:transactions';
 let transactions = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-let marketData = { prices:{}, clusters:[], recovery:[], news:[], benchmark:null };
+let marketData = { prices:{}, clusters:[], recovery:[], news:[], benchmark:null, trend:[], benchmarkTrend:[] };
+let benchRange = '1Y';
+document.addEventListener('click', (e)=>{
+  if (e.target.closest('#benchRangeToggle .range-btn')){
+    const btn = e.target.closest('.range-btn');
+    benchRange = btn.dataset.range;
+    document.querySelectorAll('#benchRangeToggle .range-btn').forEach(b=>b.classList.toggle('active', b===btn));
+    renderAll();
+  }
+});
 const palette = ['#d4a253','#5b9fd4','#b088c9','#7ec98f','#e08fa3','#e0b45b'];
 function colorFor(ticker){ let h=0; for(let i=0;i<ticker.length;i++) h=(h*31+ticker.charCodeAt(i))%palette.length; return palette[h]; }
 
@@ -502,7 +594,66 @@ async function refreshMarket(){
   }
 }
 
-function parseNum(v){ return v==null ? null : v; }
+function drawGauge(pct, level){
+  const svg = document.getElementById('gaugeSvg');
+  const color = level==='High' ? '#e0654f' : level==='Moderate' ? '#e0b45b' : '#4fbf6a';
+  const arcLen = Math.PI * 55;
+  const filled = (Math.min(pct,100)/100) * arcLen;
+  svg.innerHTML = `
+    <path d="M15 70 A55 55 0 0 1 125 70" fill="none" stroke="#232a35" stroke-width="10" stroke-linecap="round"></path>
+    <path d="M15 70 A55 55 0 0 1 125 70" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${filled} ${arcLen}"></path>
+    <text x="70" y="58" text-anchor="middle" font-family="Newsreader, serif" font-weight="600" font-size="20" fill="${color}">${level}</text>
+  `;
+}
+
+function sliceForRange(arr, range){
+  if (!arr || arr.length < 2) return arr || [];
+  const len = range==='1M' ? 2 : range==='6M' ? 6 : 12;
+  return arr.slice(-Math.min(len, arr.length));
+}
+
+function drawBenchmarkChart(){
+  const svg = document.getElementById('benchChart');
+  const trend = (marketData.trend && marketData.trend.length >= 2) ? marketData.trend : null;
+  const benchTrend = (marketData.benchmarkTrend && marketData.benchmarkTrend.length >= 2) ? marketData.benchmarkTrend : null;
+  if (!trend || !benchTrend){
+    svg.innerHTML = '<text x="300" y="90" text-anchor="middle" font-size="12" fill="#8b94a3">Refresh live data to see this comparison.</text>';
+    return;
+  }
+  const portSlice = sliceForRange(trend, benchRange);
+  const benchSlice = sliceForRange(benchTrend, benchRange);
+  const portPct = portSlice.map(v => (v - portSlice[0]) / portSlice[0] * 100);
+  const benchPct = benchSlice.map(v => (v - benchSlice[0]) / benchSlice[0] * 100);
+  const all = portPct.concat(benchPct);
+  const min = Math.min(...all, 0), max = Math.max(...all, 0), range = (max - min) || 1;
+  const w=600,h=170,padL=16,padR=16,padT=16,padB=20;
+  const n = portPct.length;
+  const stepX = (w-padL-padR) / Math.max(n-1,1);
+  const yOf = v => h-padB-((v-min)/range)*(h-padT-padB);
+  const portPts = portPct.map((v,i)=>[padL+i*stepX, yOf(v)]);
+  const benchPts = benchPct.map((v,i)=>[padL+i*stepX, yOf(v)]);
+  const path = pts => pts.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  svg.innerHTML = `
+    <line x1="${padL}" y1="${yOf(0).toFixed(1)}" x2="${w-padR}" y2="${yOf(0).toFixed(1)}" stroke="#2a3038" stroke-width="1"></line>
+    <path d="${path(benchPts)}" fill="none" stroke="#5b9fd4" stroke-width="2" stroke-dasharray="4 3"></path>
+    <path d="${path(portPts)}" fill="none" stroke="#d4a253" stroke-width="2.4"></path>
+  `;
+  document.getElementById('portLegend').textContent = T[lang].yourPortfolio + ' (' + (portPct[portPct.length-1]>=0?'+':'') + portPct[portPct.length-1].toFixed(1) + '%)';
+  document.getElementById('benchLegend').textContent = T[lang].spModeled + ' (' + (benchPct[benchPct.length-1]>=0?'+':'') + benchPct[benchPct.length-1].toFixed(1) + '%)';
+}
+
+function renderRecoveryText(holdings, clusterTickers){
+  const el = document.getElementById('recoveryText');
+  if (holdings.length === 0){ el.textContent = T[lang].recoveryEmpty; return; }
+  const rows = (marketData.recovery || []).filter(r => holdings.find(h => h.ticker === r.ticker));
+  if (rows.length === 0){ el.textContent = T[lang].recoveryNear; return; }
+  el.innerHTML = rows.map(r => {
+    const h = holdings.find(x => x.ticker === r.ticker);
+    const dd = r.peak > 0 ? (r.peak - h.price) / r.peak * 100 : 0;
+    if (dd <= 0.5) return '';
+    return `<div style="margin-bottom:6px;">${r.ticker} down ${dd.toFixed(0)}% from its ${r.peakLabel} — ${r.recoveryNote}</div>`;
+  }).join('') || T[lang].recoveryNear;
+}
 
 function renderAll(){
   applyLang();
@@ -524,6 +675,10 @@ function renderAll(){
   concLabel.textContent = level; concLabel.className = level==='High'?'down':level==='Moderate'?'':'up';
   document.getElementById('concentrationBar').style.width = concentrationPct.toFixed(0)+'%';
   document.getElementById('concentrationText').textContent = holdings.length? `${concentrationPct.toFixed(0)}% ` + (lang==='zh-TW'?'的投資組合落在偵測到的關聯風險群組中。':'of your portfolio sits inside detected overlap clusters.') : T[lang].addToSee;
+
+  drawGauge(concentrationPct, level);
+  drawBenchmarkChart();
+  renderRecoveryText(holdings, clusterTickers);
 
   // Chart
   const chart = document.getElementById('chart'); chart.innerHTML='';
