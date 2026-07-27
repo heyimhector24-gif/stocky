@@ -48,6 +48,31 @@ export default async function handler(req, res) {
     const { action, lang } = req.body || {};
     const language = lang === 'zh-TW' ? 'zh-TW' : 'en';
 
+    if (action === 'pulse') {
+      const prompt = `You have web search available. Search for current real market data:
+
+1. The S&P 500's current value and today's percent change.
+2. Three macro stats with current values and today's percent change: US 10-Year Treasury Yield, US Dollar Index (DXY), CBOE Volatility Index (VIX).
+3. Six large-cap stocks making notable moves right now (real tickers, real current percent change, found via search) — each with a short plain-English note (under 12 words) on why it's moving, purely descriptive, never a signal to act on.
+4. 2-3 real, current general market news items (real headline, real source, real URL from search results).
+
+For each of the above, also estimate a short recent relative trajectory as an array of numbers 0-100 (roughly reflecting the shape of recent movement, clearly an estimate, not certified tick data): for the S&P give 24 numbers (recent trajectory), for each macro stat give 8 numbers, for each mover no sparkline needed.
+
+${langInstruction(language)}
+${SYSTEM_RULES}
+
+Respond with ONLY raw JSON, no markdown fences:
+{"indexSnapshot":{"value":5900.0,"changePct":0.2,"sparkline":[24 numbers 0-100]},"macroStats":[{"label":"US 10Y Yield","value":"4.21%","changePct":-0.3,"sparkline":[8 numbers 0-100]},{"label":"US Dollar Index (DXY)","value":"101.3","changePct":0.1,"sparkline":[8 numbers 0-100]},{"label":"CBOE Volatility Index (VIX)","value":"14.2","changePct":-2.1,"sparkline":[8 numbers 0-100]}],"movers":[{"ticker":"TICKER","name":"Company Name","changePct":1.2,"note":"short plain note"}],"news":[{"headline":"string","source":"string","url":"https://real-url","summary":"string"}]}`;
+
+      const data = await callClaude({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 3000,
+        messages: [{ role: 'user', content: prompt }],
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }]
+      });
+      return res.status(200).json(parseJSON(extractText(data)));
+    }
+
     if (action === 'market') {
       const { tickers } = req.body;
       if (!Array.isArray(tickers) || tickers.length === 0) {

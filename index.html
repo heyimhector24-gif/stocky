@@ -133,8 +133,25 @@
   .empty-state .bear-mascot{width:40px;height:40px;margin-bottom:10px;opacity:0.7;}
   .estimate-note{font-size:10.5px;color:var(--text-dim);font-style:italic;margin-top:6px;}
 
+  .pulse-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px;margin-bottom:18px;}
+  .pulse-main{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:22px;}
+  .pulse-main .idx-label{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:0.5px;margin-bottom:6px;}
+  .pulse-main .idx-value{font-family:'Newsreader',serif;font-size:32px;font-weight:600;}
+  .pulse-main .idx-value span{font-family:'IBM Plex Mono',monospace;font-size:15px;margin-left:10px;}
+  #idxChart{width:100%;height:170px;margin-top:14px;}
+  .pulse-stats{display:flex;flex-direction:column;gap:10px;}
+  .stat-card{border:1px solid var(--line);border-radius:6px;background:var(--card);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .stat-card .lbl2{font-size:11px;color:var(--text-dim);}
+  .stat-card .val2{font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:700;margin-top:4px;}
+  .stat-card svg{width:80px;height:34px;flex-shrink:0;}
+  .movers-sub{font-size:12px;color:var(--text-dim);margin:0 0 14px;}
+  .movers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+  .mover-card{border-left:3px solid; border:1px solid var(--line);border-left-width:3px;border-radius:6px;background:var(--card);padding:14px 16px;}
+  .mover-card .mv-ticker{font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:14px;}
+  .mover-card .mv-name{font-size:11px;color:var(--text-dim);margin:2px 0 6px;}
+  .mover-card .mv-note{font-size:12px;color:var(--text);}
   @media(max-width:820px){
-    .feature-grid, .pricing-grid, .step-grid, .news-grid{grid-template-columns:1fr;}
+    .feature-grid, .pricing-grid, .step-grid, .news-grid, .pulse-grid, .movers-grid{grid-template-columns:1fr;}
     .hero h1{font-size:30px;}
     nav{padding:14px 16px;}
     .navlinks{gap:12px;font-size:12.5px;}
@@ -186,9 +203,19 @@
   </div>
 
   <div class="section">
-    <h2 data-t="newsTitle">Live market pulse</h2>
-    <p class="lead" data-t="newsLead">Real, current stories — searched live, never invented.</p>
-    <div class="news-grid" id="marketingNews"><div class="feature-card">Loading...</div></div>
+    <h2 data-t="newsTitle">Market summary</h2>
+    <p class="lead" data-t="newsLead">Real, current data — searched live, never invented.</p>
+    <div class="pulse-grid">
+      <div class="pulse-main">
+        <div class="idx-label">S&amp;P 500 · SPX (MODELED)</div>
+        <div class="idx-value" id="idxValue">—</div>
+        <svg id="idxChart" viewBox="0 0 760 170"></svg>
+      </div>
+      <div class="pulse-stats" id="macroStats"></div>
+    </div>
+    <p class="movers-sub" data-t="moversSub">Six large-caps making notable moves right now, described plainly — never a signal to act on.</p>
+    <div class="movers-grid" id="moversGrid"><div class="feature-card">Loading...</div></div>
+    <div class="news-grid" id="marketingNews" style="margin-top:14px;"></div>
   </div>
 
   <div class="section" id="trustSection">
@@ -324,7 +351,8 @@ const T = {
     step1:'Tell us what you own — just tickers and shares, no account linking.',
     step2:"We check your holdings against each other — flagging real shared risk you wouldn't spot from the names alone.",
     step3:'See it before it matters — a plain-English reason, not just a chart.',
-    newsTitle:'Live market pulse', newsLead:'Real, current stories — searched live, never invented.',
+    newsTitle:'Market summary', newsLead:'Real, current data — searched live, never invented.',
+    moversSub:'Six large-caps making notable moves right now, described plainly — never a signal to act on.',
     dataTitle:'How your data works',
     d1t:'01 — You type it in.', d1p:'No bank credentials, no account linking. Every share count comes from you.',
     d2t:'02 — Yours to take.', d2p:'Export everything anytime, or clear it in one click.',
@@ -357,7 +385,8 @@ const T = {
     step1:'告訴我們您持有什麼——只需股票代號與股數，無需連結任何帳戶。',
     step2:'我們會交叉檢查您的持股——找出光看名稱看不出來的真實共同風險。',
     step3:'在風險發生前就先看到——用簡單易懂的文字說明原因，而不只是一張圖表。',
-    newsTitle:'即時市場動態', newsLead:'真實、即時的新聞——即時搜尋取得，絕不捏造。',
+    newsTitle:'市場摘要', newsLead:'真實、即時的資料——即時搜尋取得，絕不捏造。',
+    moversSub:'六支目前波動明顯的大型股，客觀描述——從不作為操作建議。',
     dataTitle:'您的資料如何被使用',
     d1t:'01 — 由您自行輸入。', d1p:'無需銀行帳密，無需連結帳戶。每一筆股數都由您提供。',
     d2t:'02 — 資料完全屬於您。', d2p:'隨時匯出所有資料，或一鍵清除。',
@@ -625,6 +654,64 @@ async function sendChat(){
   msgs.scrollTop = msgs.scrollHeight;
 }
 
+function sparkPath(arr, w, h, pad){
+  if (!arr || arr.length < 2) return '';
+  const max = Math.max(...arr), min = Math.min(...arr), range = (max-min)||1;
+  const stepX = (w - pad*2) / (arr.length - 1);
+  return arr.map((v,i) => {
+    const x = pad + i*stepX;
+    const y = h - pad - ((v-min)/range) * (h - pad*2);
+    return (i===0?'M':'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+}
+
+async function loadMarketPulse(){
+  const idxValueEl = document.getElementById('idxValue');
+  const idxChart = document.getElementById('idxChart');
+  const statsEl = document.getElementById('macroStats');
+  const moversEl = document.getElementById('moversGrid');
+  try{
+    const res = await fetch('/api/stocky', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'pulse', lang })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Request failed');
+
+    const idx = data.indexSnapshot || {value:0, changePct:0, sparkline:[]};
+    idxValueEl.innerHTML = idx.value.toLocaleString(undefined,{maximumFractionDigits:2}) + `<span class="${idx.changePct>=0?'up':'down'}">${idx.changePct>=0?'+':''}${idx.changePct.toFixed(2)}%</span>`;
+    const w=760,h=170,pad=20;
+    const path = sparkPath(idx.sparkline, w, h, pad);
+    const area = path ? path + ` L${w-pad},${h} L${pad},${h} Z` : '';
+    const col = idx.changePct>=0 ? '#4fbf6a' : '#e0654f';
+    idxChart.innerHTML = path ? `<path d="${area}" fill="${col}" opacity="0.12"></path><path d="${path}" fill="none" stroke="${col}" stroke-width="2"></path>` : '';
+
+    statsEl.innerHTML = (data.macroStats||[]).map(s=>{
+      const p = sparkPath(s.sparkline, 80, 34, 3);
+      const c = s.changePct>=0 ? '#4fbf6a' : '#e0654f';
+      return `<div class="stat-card">
+        <div><div class="lbl2">${s.label}</div><div class="val2">${s.value} <span class="${s.changePct>=0?'up':'down'}" style="font-size:11px;">${s.changePct>=0?'+':''}${s.changePct.toFixed(2)}%</span></div></div>
+        <svg viewBox="0 0 80 34"><path d="${p}" fill="none" stroke="${c}" stroke-width="1.6"></path></svg>
+      </div>`;
+    }).join('');
+
+    moversEl.innerHTML = (data.movers||[]).slice(0,6).map(m=>{
+      const c = colorFor(m.ticker);
+      return `<div class="mover-card" style="border-left-color:${c};">
+        <div class="mv-ticker" style="color:${c};">${m.ticker} <span class="${m.changePct>=0?'up':'down'}" style="font-family:'IBM Plex Mono',monospace;font-size:12px;">${m.changePct>=0?'+':''}${m.changePct.toFixed(1)}%</span></div>
+        <div class="mv-name">${m.name||''}</div>
+        <div class="mv-note">${m.note||''}</div>
+      </div>`;
+    }).join('') || '<div class="feature-card">No live movers available.</div>';
+
+    renderMarketingNews(data.news || []);
+  } catch(e){
+    idxValueEl.textContent = 'Unavailable';
+    statsEl.innerHTML = '';
+    moversEl.innerHTML = `<div class="feature-card">${e.message}</div>`;
+  }
+}
+
 async function loadMarketingTicker(){
   const el = document.getElementById('marketingTicker');
   try{
@@ -638,8 +725,6 @@ async function loadMarketingTicker(){
       `<span class="${d.changePct>=0?'up':'down'}">${t} $${d.price} ${d.changePct>=0?'▲':'▼'}${Math.abs(d.changePct).toFixed(1)}%</span>`
     ).join('');
     el.innerHTML = html + html;
-    window.__lastMarketingData = data;
-    renderMarketingNews(data.news || []);
   } catch(e){
     el.innerHTML = '<span>Ticker unavailable.</span>';
   }
@@ -662,6 +747,7 @@ function renderMarketingNews(items){
 document.getElementById('txnDate').value = new Date().toISOString().slice(0,10);
 applyLang();
 loadMarketingTicker();
+loadMarketPulse();
 renderAll();
 </script>
 </body>
