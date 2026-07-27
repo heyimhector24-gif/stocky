@@ -60,7 +60,7 @@
 
   .news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
   .news-card{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--card);}
-  .news-card .thumb{height:70px;background:linear-gradient(135deg,#1f2733,#161b22);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:11px;}
+  .news-card .thumb{height:90px;background:linear-gradient(135deg,#1f2733,#161b22);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:11px;}
   .news-card .body{padding:14px;}
   .news-card .source{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--brass);text-transform:uppercase;margin-bottom:6px;}
   .news-card h4{font-family:'Newsreader',serif;font-size:14px;margin:0 0 8px;line-height:1.3;color:var(--text);}
@@ -670,11 +670,15 @@ async function loadMarketPulse(){
   const idxChart = document.getElementById('idxChart');
   const statsEl = document.getElementById('macroStats');
   const moversEl = document.getElementById('moversGrid');
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 45000);
   try{
     const res = await fetch('/api/stocky', {
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'pulse', lang })
+      body: JSON.stringify({ action:'pulse', lang }),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Request failed');
 
@@ -708,7 +712,7 @@ async function loadMarketPulse(){
   } catch(e){
     idxValueEl.textContent = 'Unavailable';
     statsEl.innerHTML = '';
-    moversEl.innerHTML = `<div class="feature-card">${e.message}</div>`;
+    moversEl.innerHTML = `<div class="feature-card">${e.name==='AbortError' ? 'Timed out — try refreshing the page.' : e.message}</div>`;
   }
 }
 
@@ -729,11 +733,20 @@ async function loadMarketingTicker(){
     el.innerHTML = '<span>Ticker unavailable.</span>';
   }
 }
+function faviconFor(url){
+  try{
+    const domain = new URL(url).hostname;
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+  } catch(e){ return ''; }
+}
+
 function renderMarketingNews(items){
   const el = document.getElementById('marketingNews');
-  el.innerHTML = items.length ? items.map(n=>`
+  el.innerHTML = items.length ? items.map(n=>{
+    const icon = n.url ? faviconFor(n.url) : '';
+    return `
     <div class="news-card">
-      <div class="thumb">${n.source||'News'}</div>
+      <div class="thumb">${icon ? `<img src="${icon}" style="width:32px;height:32px;" alt="">` : (n.source||'News')}</div>
       <div class="body">
         <div class="source">${n.source||''}</div>
         <h4>${n.headline}</h4>
@@ -741,7 +754,8 @@ function renderMarketingNews(items){
         <a href="${n.url}" target="_blank" rel="noopener">${lang==='zh-TW'?'閱讀更多 →':'Read more →'}</a>
       </div>
     </div>
-  `).join('') : '<div class="feature-card">No live news available.</div>';
+  `;
+  }).join('') : '<div class="feature-card">No live news available.</div>';
 }
 
 document.getElementById('txnDate').value = new Date().toISOString().slice(0,10);
